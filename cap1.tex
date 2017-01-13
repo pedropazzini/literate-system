@@ -1,0 +1,67 @@
+\chapter{Introdução}
+Ao conjunto de tecnologias que visam modernizar o sistema elétrico de potência, dá-se o nome de Redes Elétricas Inteligentes (\emph{Smart Grids}), doravante REI. Tal conjunto de tecnologias faz uso de sistemas de medição, computação e comunicações digitais de forma a gerar um fluxo de informações bidirecional entre o fornecedor do sistema de energia e o cliente final. Os maiores impactos da adoção de tais tecnologias ocorrerão na distribuição de energia elétrica e nos pequenos consumidores. Pelo número crescente de investimentos em pesquisa de REI em todo mundo, percebe-se que esta se apresenta como uma forte tendência de modernização dos sistemas elétricos de potência em diversos países ~\parencite{REI}.
+
+Uma das bases dessa nova tecnologia é a instalação de sensores, conhecidos como \emph{smart meters} ou medidores inteligentes (MI),  em diversos pontos da rede, de forma a se obter dados relevantes da mesma. Com a instalação desses sensores em cada consumidor, seja ele residencial, comercial ou industrial, será possível medir periodicamente a potência consumida por ele. De posse desses dados, os consumidores podem ser classificados por padrões de consumo e a partir dessa classificação espera-se obter, por exemplo, as seguintes vantagens:
+\begin{itemize}
+	\item Realização de uma política de tarifas diferenciadas por tipo de consumidor.
+	\item Aprimoramento das técnicas de previsão de demanda por parte dos fornecedores
+	de energia.
+	\item Auxílio dos consumidores na análise do seu consumo de energia para a elaboração
+	de estratégias de redução deste.
+	\item Fomento de um mercado competitivo de fornecimento de energia.
+	\item Identificação automática de falhas e fraudes.
+\end{itemize}
+
+De forma geral, a análise inteligente de dados extraídos dos \emph{smart meters} permitirá
+às companhias o desenvolvimento de novas capacidades em termos de gerenciamento e
+planejamento da rede, bem como novos serviços direcionados ao consumidor visando a
+eficiência energética ~\parencite{ReviewElectric}.
+
+O grande volume de dados gerados pelos \emph{smart meters} demandarão algoritmos e estratégias capazes de extraírem informação útil dessa grande massa de dados. A tarefa de se encontrar subgrupos em determinado conjunto de dados baseando-se somente nas características dos elementos do conjunto é denominada agrupamento, que, do ponto de vista da Inteligência Computacional, faz parte do paradigma de aprendizado não-supervisionado. Ou seja, o agrupamento se caracteriza pela necessidade de se formar grupos dos dados, de forma que os dados são mais semelhantes entre si quando contidos no mesmo grupo, ao passo que estes são mais díspares possível dos dados pertencentes a outros grupos. 
+
+Por não-supervisionado, entende-se que a tarefa de agrupamento se dará apenas a partir das características dos dados, e que não existe rotulação dos mesmos, ou seja, não se sabe a priori à qual classe, ou grupo, os dados pertencem e, em certos problemas, não se sabe também o número de grupos nos quais os dados se encontram naturalmente divididos.
+
+O problema de se dividir as curvas de carga geradas por MI em grupos é um problema de agrupamento de séries temporais, pois na maioria das aplicações, os dados de consumo são medidos em intervalos regulares, caracterizando, assim, uma série temporal. Ademais, não sabemos de antemão a qual grupo cada carga pertence e nem o número de grupos que contêm os dados, logo devido à ausência de dados rotulados, constitui-se como uma tarefa de agrupamento.
+
+\section{Objetivos e contribuições}
+
+O objetivo geral desta dissertação de mestrado foi investigar as técnicas consideradas estado da arte para o agrupamento de séries temporais, visando à proposta de uma metodologia para agrupamento de cargas elétricas de consumo. Tal investigação envolveu o estudo teórico-empírico de diferentes formas de normalização de dados, métodos de agrupamento, medidas de dissimilaridade e índices de validação.
+
+Seria extremamente interessante que os dados a serem utilizados durante o trabalho fossem o mais representativos possível à realidade brasileira, ou seja, sem as influências da grande variação de temperatura que ocorre nos países do hemisfério norte, que é onde se encontra mais avançada a pesquisa e implantação de REI e, consequentemente, de instalação de MI e a disponibilidade de dados para pesquisa.
+
+Em ~\parencite{REI} é feita uma menção à um projeto da CEMIG em Sete Lagoas denominado "Cidade do Futuro". Tal projeto é reconhecido como pioneiro no Brasil no que se refere à pesquisa e instalação de equipamentos de REI no atual sistema elétrico de potência brasileiro. No entanto, estes dados ainda não são de domínio público. Dessa maneira, neste trabalho, optou-se por utilizar dados de cargas residenciais da Austrália, obtidos de ~\parencite{dadosAustralia}.
+
+Os dados consistem de cerca de três anos e meio de medições do consumo de aproximadamente 13000 residências australianas, com uma taxa de amostragem de trinta minutos. Por questões de privacidade, somente os dados de consumo foram disponibilizados, e outros dados que poderiam ser úteis na tarefa de agrupamento como: localização das residências, número e situação econômica dos moradores, entre outros, não foram fornecidos. Dessa maneira, a única informação disponível para a realização do agrupamento das cargas são as curvas de demanda. Existem dados inconsistentes e incompletos o que demandou uma fase de pré-processamento dos mesmos, no qual o número de curvas a serem agrupadas foi reduzido para 427.
+
+Para a realização do agrupamento de curvas de carga fazem-se necessárias as escolhas de um tipo de normalização, de uma métrica de dissimilaridade para se comparar as cargas, de um algoritmo de agrupamento para se obter a partição dos dados, e de um índice de validação que indique a qualidade da partição obtida. 
+
+A etapa de normalização tem como objetivos principais reduzir a dimensionalidade das séries temporais e  facilitar a comparação entre séries temporais que possuam amplitudes ou \emph{offsets} muito discrepantes. As abordagens mais comuns para a redução de dimensionalidade consistem na \emph{Piecewise aggregate approximation} ~\parencite{SAX} ou na transformada discreta de Fourier ~\parencite{FFT}. Já a eliminação de distorções, tais como amplitude e \emph{offset}, pode ser realizada por meio da normalização Z ~\parencite{trillions}, ou por meio da normalização \emph{max} como utilizada em ~\parencite{Chicco}. Em geral, em problemas de agrupamento de cargas é utilizada a normalização \emph{max} sem nenhum tipo de redução de dimensionalidade, como pode ser visto em ~\parencite{Chicco, Flath2012,Tsekouras20081494}, no entanto, outras abordagens foram testadas.
+
+Uma vez definido a normalização a ser aplicada nos dados, surge a necessidade de se escolher a medida de dissimilaridade a ser utilizada na comparação entre as cargas. A distância euclidiana se apresenta onipresente em estudos de agrupamento de cargas, no entanto, em outras aplicações como, por exemplo, na classificação de séries temporais, medidas de dissimilaridades como a DTW \parencite{DTW}, corrigidas por métodos de invariância à complexidade ~\parencite{CID}, têm obtido desempenho superior à distância euclidiana ~\parencite{BatistaComparativo}. Isso motivou o presente estudo a verificar a aplicabilidade de tais métricas ao problema de agrupamento de séries temporais em geral e de agrupamento de curvas de carga em específico.
+
+Após o estabelecimento de uma métrica de dissimilaridade para a comparação das cargas, faz-se necessária a escolha de um algoritmo de agrupamento. O algoritmo mais utilizado em tarefas de agrupamento de cargas é o \emph{k-means}, devido à sua simplicidade e praticidade. No entanto, ele possui a deficiência de fazer uso de somente a distância euclidiana ~\parencite[][254]{Ullman}, o que descarta potenciais ganhos a serem obtidos com a escolha de outras medidas de dissimilaridades. O \emph{k-means} assume que o formato dos grupos é do tipo hiper-esfera (esférico) , o que pode não ser verdade para dados multidimensionais como dados de séries temporais. Ademais, existem estudos que mostram que outros algoritmos de agrupamento, como os algoritmos hierárquicos, possuem desempenho superior aos algoritmos particionais, como o \emph{k-means}, no contexto de séries temporais ~\parencite{k_shape}.
+
+A partição dos dados a partir da aplicação do algoritmo escolhido, deve ser avaliada por um índice que indique a qualidade da mesma. Tal índice é útil, também, para comparar os resultados obtidos por diferentes escolhas de normalização, métrica de dissimilaridade e algoritmo de agrupamento. Não existe um índice que seja sistematicamente empregado no agrupamento de curvas de carga, e dessa maneira, os principais índices de validação de agrupamento são discutidos e comparados neste trabalho.
+
+Sendo assim, devido a multiplicidade de caminhos possíveis para a realização da tarefa de agrupamento de séries temporais, a primeira fase do estudo focou em analisar, por meio de conjuntos de dados \emph{benchmark} (rotulados) de séries temporais, uma gama de metodologias de agrupamento propostas na literatura com o intuito de se obter um direcionamento para a aplicação nos dados reais australianos.
+
+Além da tarefa de agrupamento em si, os tempos e custos, no que diz respeito à utilização de processamento, também são objetos de estudo desta pesquisa. Assim, espera-se que este trabalho auxilie no dimensionamento de um sistema computacional a ser utilizado pelas companhias de distribuição de energia elétrica para o agrupamento de curvas de caragas obtidas por MI.
+
+%De uma forma geral, espera-se com este trabalho que, a partir de dados estrangeiros, seja possível a criação de uma metodologia de extração de informações úteis a partir dos dados obtidos de MI, quando estes forem instalados em larga escala no sistema elétrico de potência brasileiro.
+
+Dentre as principais contribuições desta dissertação, pode-se citar:
+\begin{itemize}
+	\item Extensa revisão bibliográfica acerca do problema e das várias opções para a realização de agrupamento de séries temporais.
+	\item Proposição de uma metodologia genérica para a realização de agrupamento de séries temporais embasada em dados empíricos de experimentos realizados com bases de dados rotuladas.
+	\item Proposição de uma metodologia específica para a realização de agrupamento de curvas de carga.
+\end{itemize}
+
+\section{Visão Geral do Texto}
+
+O restante do texto desta dissertação de mestrado se apresenta da seguinte maneira:
+
+O Capítulo ~\ref{cap:agrupamento_series_temporais} apresenta uma extensa revisão bibliográfica acerca dos aspectos relevantes durante a tarefa de agrupamento de séries temporais. Nele, são destacadas as principais métricas de dissimilaridade, bem como os principais algoritmos de agrupamento para a realização do agrupamento. Ao final deste capítulo, também são discutidos os métodos de avaliação dos resultados do agrupamento.
+
+Em seguida, no Capítulo ~\ref{cap:testes_teoricos}, são realizados testes em conjuntos de dados rotulados (\emph{benchmark}), com a finalidade de se avaliar os algoritmos de agrupamento, métricas de dissimilaridades e métodos de avaliação discutidos no Capítulo ~\ref{cap:agrupamento_series_temporais}. Neste terceiro capítulo, foram realizados três experimentos com a finalidade de se definir a estratégia de agrupamento a ser empregada no estudo de caso com dados reais. O primeiro destes experimentos teve como objetivo definir o algoritmo de agrupamento a ser empregado no referido estudo de caso. Já o segundo procurou definir a métrica de dissimilaridade, enquanto o terceiro visou apontar a melhor maneira de se avaliar o resultado do agrupamento. Em todos os experimentos foram realizados testes estatísticos de significância para se definir a melhor estratégia a ser empregada no agrupamento da base de dados australiana.
+
+Após as definições obtidas a partir dos testes realizados no Capítulo ~\ref{cap:testes_teoricos}, o estudo de caso em si, que consiste no agrupamento das cuvas de carga das residências australianas, é descrito no Capítulo ~\ref{cap:estudo_de_caso}. Finalmente, no Capítulo ~\ref{cap:conclusao}, são apresentadas as conclusões gerais do trabalho bem como algumas das propostas para sua continuidade.

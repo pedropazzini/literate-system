@@ -1,0 +1,220 @@
+\chapter{Estudo de caso} \label{cap:estudo_de_caso}
+
+Neste capítulo, é descrita a metodologia para o agrupamento das curvas de carga obtidas pela medição periódica do consumo de energia elétrica das residências australianas. O objetivo deste agrupamento é verificar as influências que existem na potência consumida em cada carga em função dos dias de semana e da estação do ano. 
+
+Em geral, tarefas de mineração de dados, independente do domínio do problema, buscam  extrair conhecimento inovador, para auxiliar as tomadas de decisões a nível gerencial ~\parencite{carvalhointeligencia}. Assim, o agrupamento dos perfis de consumo de carga buscam gerar perfis característicos de consumo em diferentes estações do ano, e em diferentes dias da semana. Ademais, espera-se realizar a segmentação dos consumidores para a proposição de uma eventual taxa diferenciada de cobrança para cada grupo de consumidores encontrado. Segundo \parencite{Flath2012}, tal faixa diferenciada criada pelas concessionárias de energia a partir da segmentação de seus consumidores residenciais tem o poder de influenciar o consumo destes, podendo, assim, diminuir os picos de consumo.
+
+\section{Metodologia}
+
+O conjunto de dados australiano consiste das medições de $13735$ cargas, realizadas de 6/10/2011 a 4/3/2014, no entanto, na avaliação foram utilizadas somente as medições das primeiras 5000 cargas durante um ano compreendido de 21/12/2012 a 21/12/2013. A redução do número de cargas a serem analisadas foi necessária por restrições de memória RAM, já que esta se encontrava limitada em 8GB. Já a restrição e escolha das datas de início e fim do período em análise, se deu pela necessidade de se avaliar as curvas diárias dos medidores em função da variação das estações do ano, assim, o intervalo de análise das medições foi reduzido para um ano, e teve como dia de início e fim o dia do solstício de verão do hemisfério sul, de forma que existe um número igual de medições para cada uma das quatro estações do ano.
+
+A potência consumida foi medida pelos medidores australianos a cada $30$ minutos, totalizando $48$ medições diárias. Existem dados incompletos (medições faltantes) ou inconsistentes (medições repetidas em um mesmo instante), o que fez com que fosse necessária uma etapa de filtragem dos dados. Nesta etapa, se um medidor apresentasse dados de medição incompletos ou inconsistentes, ele seria descartado. Isso fez com que o número de medidores utilizados no agrupamento fosse reduzido drasticamente para $427$ cargas.
+
+A tarefa de agrupamento foi realizada em seis conjuntos de dados distintos, mas cada conjunto contendo os mesmo medidores. A formação dos conjuntos de dados se deu a partir da combinação das estações do ano; inverno, verão e transição, sendo esta última compreendida pelas estações outono e inverno, com os dois tipos de dia de semana; final de semana e dia de semana. Cada um desses subconjuntos é composto pela curva diária mais representativa de cada medidor nos dias correspondentes ao grupo, portanto, cada subconjunto contém, ao final, $427$ curvas. Tal divisão é a mesma realizada em ~\parencite{Flath2012}, onde curvas de carga de consumidores residenciais, comerciais, industriais e rurais da Alemanha foram agrupados.
+
+A formação destes $6$ subconjuntos pode ser visualizada na Figura ~\ref{fig:diagrama_dados}. A primeira caixa (Perfis diários anuais) contém $155.855$ curvas ($427*365$), e em seguida, cada uma das curvas é direcionada para o segundo nível. As curvas obtidas por medições em dias do final de semana (sábado e domingo) são direcionadas para a caixa à esquerda (Final de semana), enquanto as curvas obtidas por medições em dias de semana (segunda-feira, terça-feira, quarta-feira, quinta-feira e sexta-feira) são direcionadas para a caixa à direita (Dia de semana). Finalmente, em cada uma das caixas, cada curva é novamente direcionada para um novo subconjunto em função da estação do ano que ela foi obtida. Cada um dos subconjuntos do terceiro nível da figura contém todas as medições, no período definido pelo subconjunto, para cada um dos $427$ medidores, e, dessa maneira, para a realização do agrupamento, faz-se necessária a obtenção de uma curva representativa para cada um dos $427$ medidores em cada um dos $6$ subconjuntos.
+
+ \begin{figure}
+	%\vspace{2.5cm}
+	%\resizebox{\columnwidth}{!}{%
+	\includegraphics[width=\linewidth]{figuras/diagrama_dados.png}
+	%}
+	\caption{Formação dos $6$ subconjuntos de dados a partir dos perfis diários.}
+\end{figure} \label{fig:diagrama_dados}
+
+A curva diária mais representativa de cada medidor foi escolhida como o centróide de todas as medições naquele subconjunto, pois esta escolha, em detrimento do medóide, fez com que as curvas características de cada medidor se tornassem mais suaves, o que facilitou a tarefa de agrupamento e de interpretação dos resultados. Após a obtenção do centróide de cada medidor, em cada um dos seis subconjuntos, obteve-se seis matrizes de $427x48$, já que em um dia foram realizadas 48 medições por cada um dos $427$ medidores em cada um dos seis subconjunto de dados. Uma vez que todos os centróides possuíam valores positivos e a normalização max é a mais utilizada no agrupamento de curvas de carga ~\parencite{Chicco}, então neste estudo de caso, cada centróide foi normalizado pela normalização max descrita na Seção ~\ref{sec:norm_Z}.
+
+\section{Agrupamento}
+
+Cada um dos seis conjuntos de dados foi agrupado segundo a estratégia definida no Capítulo ~\ref{cap:testes_teoricos}, ou seja, algoritmo hierárquico com \emph{linkagem average} e métrica de dissimilaridade, e avaliação do índice Calinski-Harabasz para a indicação do número de grupos, que foi variado de $2$ a $20$. Notou-se que os melhores valores desses índices eram obtidos em partições altamente desbalanceadas, ou seja, partições que possuíam um dos grupos contendo cerca de $95\%$ dos medidores. Uma partição com tamanho desbalanceamento não é, na maior parte das vezes, adequada, pois não se pode extrair nenhuma informação útil dela, já que não se pode realizar a segmentação dos consumidores de energia.
+
+A partir dos resultados insatisfatórios obtidos a partir da estratégia indicada no final do ~\ref{cap:testes_teoricos}, foram realizados agrupamentos com os seguintes algoritmos: k-means, k-medoids, hierarchical-average . Para cada um dos algoritmos, com exceção do k-means que foi realizado somente para a distância euclidiana, foi realizado um agrupamento com as seguintes dissimilaridades: euclidiana, cid-euclidiana, cort-euclidiana, chebyshev, cid-chebyshev, cort-chebyshev, DTW, cid-DTW, cort-DTW, EDR, cid-EDR, cort-EDR. Para cada combinação possível de algoritmo e dissimilaridade, o valor $k$ do número de grupos foi, novamente, variado de $2$ a $20$. A partir das combinações de algoritmo, métrica de dissimilaridade e $k$, formou-se $684$ partições diferentes para cada um dos  seis conjuntos de dados.
+
+Cada partição foi avaliada pelos índices internos silhouette e Calinski-Harabasz, onde, novamente, todas as soluções apontadas pelos índices se encontravam altamente desbalanceadas.  Em uma tentativa de se obter partições mais balanceadas, descartou-se as instâncias que compunham os grupos minoritários, por pensar que estas poderiam ser \emph{outliers}, e o agrupamento foi realizado novamente somente no grupo majoritário, que continha quase a totalidade das instâncias. Os resultados acarretaram, novamente, em partições altamente desbalanceadas. Este procedimento foi repetido reiteradamente, até que se encontra-se um número muito pequeno de cargas, cerca de 10\% do número inicial.
+
+Em uma terceira tentativa, para realizar o agrupamento dos subconjuntos, utilizou-se o DBSCAN, devido, principalmente, à sua robustez frente a conjuntos de dados ruidosos. Foi utilizada a métrica CID-Euclidiana, e os critérios de \emph{MinPts} e \emph{Eps}, foram escolhidos pelo gráfico \emph{k-dist}, conforme exemplo da seção ~\ref{sec:dbscan}. Novamente, o DBSCAN apontou uma partição dos dados composta por um único grupo majoritário e um número reduzido de instâncias que ele classificou como \emph{outliers}. Assim, como na abordagem com o algoritmo hierárquico, as instâncias que foram consideradas \emph{outliers} foram descartadas e o DBSCAN foi novamente empregado nas instâncias que compunham o grupo majoritário. Uma única partição majoritária foi novamente obtida, com um número reduzido de \emph{outliers}. Assim, chegou-se a conclusão que o grupo de dados australiano é composto, efetivamente, por instâncias compactas, de forma que o agrupamento das mesmas deverá ser realizado por outra técnica não abordada até o momento.
+
+No trabalho realizado em ~\parencite{Flath2012}, que foi inspiração para este estudo de caso, não foram obtidas partições tão desbalanceadas  com um procedimento similar ao empregado na base de dados australiana, salvo à utilização do índice DBI ao invés do índice Calnski-Harabasz para a indicação do número de grupos. Dentre as 215 cargas alemãs utilizadas no referido estudo, existiam cargas industriais, residenciais, rurais e comerciais, diferentemente da base de dados australiana que contém somente dados de medidores inteligentes instalados em cargas residenciais. Dessa maneira, dada a própria heterogeneidade dos tipos de cargas a serem agrupadas, no estudo alemão, foi possível a obtenção de grupos mais balanceados com as técnicas empregadas até o momento.
+
+\subsection{Estratégia alternativa de agrupamento}
+
+Após os resultados insatisfatórios obtidos nas partições, deu-se prosseguimento à uma nova estratégia para a escolha da partição de cada um dos seis conjuntos de dados construídos. Calculou-se as porcentagens de cargas  contidas em cada grupo, de cada partição obtida. A partir dos valores de porcentagem de cada grupo, obteve-se os valores mínimos, máximos, médios, e o desvio padrão das porcentagens de cada partição. Partições cujo valor máximo excedeu $50\%$, ou cujo valor mínimo foi inferior à $5\%$ foram descartadas. O outro critério a ser utilizado na escolha da melhor partição de cada grupo foi o índice silhouette. Este índice foi escolhido por ter um limite superior, ou seja, valor máximo igual a $1$, o que faz com que seja possível a sua utilização na comparação de duas partições obtidas por diferentes dissimilaridades, por exemplo. Ao se utilizar o índice Calinski-Harabasz, valores muito discrepantes são obtidos para as diferentes partições, e por não possuir um valor máximo, os valores de cada partição não podem ser normalizados para que a sua comparação seja realizada efetivamente.
+
+Observou-se que as partições que possuíam valores maiores do índice silhouette eram as mais desbalanceadas, ou seja, com um alto valor de desvio padrão, ao passo que as partições com um baixo desvio padrão, ou balanceadas, possuíam um valor de silhouette aproximadamente igual a $0$, o que indica partições cujo agrupamento foi realizado de forma próxima à aleatória. Assim, dada à característica conflitante observada entre esses dois objetivos; qualidade da partição, associada ao valor de silhouette, e balanceamento da mesma, associada ao desvio padrão das porcentagens de cargas em cada grupo, ficou caracterizado um problema de otimização multiobjetivo. Logo, fez-se necessário encontrar as soluções, ou partições, não dominadas e da escolha de uma solução, ou partição, dentre aquelas soluções que formam a fronteira Pareto-ótima.
+
+Não houve a necessidade de se utilizar um método de otimização multiobjetivo, pois todas as  partições já estavam calculadas. O que se fez foi encontrar as soluções não dominadas que formam a fronteira Pareto-ótima. Uma vez encontrada as soluções que formam a fronteira de Pareto-ótima, calculou-se a distância da solução ótima $[1,0]$, ou seja valor de silhouette igual a $1$ e desvio padrão igual à $0$, a cada uma das soluções da fronteira Pareto-ótima. Aquela que possuía a menor distância foi escolhida como partição adequada para aquele conjunto de dados. Os resultados, ou seja, as partições escolhidas, podem ser encontrados na tabela ~\ref{tbl:resultado_australia}.
+
+O espaço de soluções bem como as curvas características de cada curva em cada um dos seis conjuntos de dados podem ser visualizados nas figuras ~\ref{fig:pareto_DDS_transicao}, ~\ref{fig:pareto_DDS_inverno}, ~\ref{fig:pareto_DDS_verao}, ~\ref{fig:pareto_FDS_transicao}, ~\ref{fig:pareto_FDS_inverno} e ~\ref{fig:pareto_FDS_verao}. Nestas figuras, cada ponto representa uma partição, e pode-se notar que existem cerca de $20$ pontos em cada figura, ao invés das $684$ partições inicialmente obtidas. Isso ocorreu devido à restrição imposta ao se descartar partições cujo grupo majoritário contêm mais de \%50 das instâncias ou o grupo minoritário contém menos de \%5 do total de instâncias. Esta redução drástica no número de partições, reforça o caráter compacto do grupo, já que para diferentes escolhas de algorimo e métrica de dissimilaridade, a maioria das partições obtidas não atendeu à restrição imposta. Os pontos em vermelho nas figuras compõem a fronteira Pareto-ótima, e a solução, ou partição, indicada é representada pelo ponto amarelo.
+
+%\begin{center}
+	%\begin{table}			
+		%\caption{Tabela que apresenta as informações das partições escolhidas para cada um dos seis sub-conjuntos gerados.} 
+		%\resizebox{\columnwidth}{!}{%
+		%\begin{tabular}{lllllllrrrrrr}
+			%\toprule
+			%{} & Norm. &    method & Dia de semana & Estação &        Alg. &              diss. &   k &       max &      mean &       min &  silhouette &       std \\
+			%\midrule
+			%292  &  max &  centroid &      False &      T &    k-means &      minkowski\_2 &   9 &  0.175644 &  0.111111 &  0.067916 &    0.124528 &  0.032075 \\
+			%977  &  max &  centroid &      False &      W &    k-means &      minkowski\_2 &  10 &  0.142857 &  0.100000 &  0.060890 &    0.113796 &  0.026455 \\
+			%1659 &  max &  centroid &      False &      S &    k-means &      minkowski\_2 &   8 &  0.189696 &  0.125000 &  0.065574 &    0.115326 &  0.034893 \\
+			%2262 &  max &  centroid &       True &      T &  k-medoids &  cid-minkowski\_2 &   3 &  0.360656 &  0.333333 &  0.306792 &    0.066607 &  0.021997 %\\
+		%	3028 &  max &  centroid &       True &      W &    k-means &      minkowski\_2 &   9 &  0.152225 &  0.111111 &  0.060890 &    0.126416 &  0.026659 \\
+		%	3706 &  max &  centroid &       True &      S &    k-means &      minkowski\_2 &   3 &  0.355972 &  0.333333 &  0.295082 &    0.165268 &  0.027199 \\
+		%	\bottomrule
+	%	\end{tabular}
+
+%	}
+%	\end{table} \label{tbl:resultado_australia}
+%\end{center}
+
+\begin{center}
+	\begin{table}			
+		\caption{Tabela que apresenta as informações das partições escolhidas para cada um dos seis sub-conjuntos gerados.} 
+		\resizebox{\columnwidth}{!}{%
+			\begin{tabular}{lllllllrrrrrr}
+				\toprule
+				Norm. &    Dia de semana & Estação &        Alg. &              diss. &   k &       max \%&      méd. \% &       min \% &  silhouette &       std \% \\
+				\midrule
+				  max &        {} &      Transição &    k-means &      eucl. &   9 &  0.17 &  0.11 &  0.07 &    0.12 &  0.03 \\
+				  max &  		{} &      Inverno &    k-means &      eucl. &  10 &  0.14 &  0.10 &  0.060 &    0.11 &  0.02 \\
+				  max &  {} &      Verão &    k-means &      eucl. &   8 &  0.18 &  0.12 &  0.06 &    0.11 &  0.03 \\
+				  max &  \checkmark &      Transição &  k-medoids &  cid-eucl. &   3 &  0.36 &  0.33 &  0.31 &    0.07 &  0.02 \\
+				  max &  \checkmark &      Inverno &    k-means &      eucl. &   9 &  0.15 &  0.11 &  0.06 &    0.13 &  0.02 \\
+				  max &  \checkmark &      Verão &    k-means &      eucl. &   3 &  0.36 &  0.33 &  0.30 &    0.17&  0.03 \\
+				\bottomrule
+			\end{tabular}
+			
+		}
+	\end{table} \label{tbl:resultado_australia}
+\end{center}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/pareto_Final_de_Semana_Verao.png}
+		\caption{Soluções no espaço de soluções.}
+		\label{fig:pareto_FDS_verao}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/Final_de_Semana_Verao.png}
+		\caption{Medóides de cada um dos grupos da partição escolhida.}
+		\label{fig:FDS_verao}
+	\end{subfigure}
+	\caption{Resultado final para os curvas diárias das cargas medidas nos dias do final de semana e no verão. Os pontos em azul, na Figura ~\ref{fig:pareto_FDS_verao}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo.}
+	\label{fig:FDS_verao_}
+\end{figure}
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/pareto_Final_de_Semana_Inverno.png}
+		\caption{Soluções no espaço de soluções.}
+		\label{fig:pareto_FDS_inverno}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/Final_de_Semana_Inverno.png}
+		\caption{Medóides de cada um dos grupos da partição escolhida.}
+		\label{fig:FDS_inverno}
+	\end{subfigure}
+	\caption{Resultado final para os curvas diárias das cargas medidas nos dias do final de semana e no inverno. Os pontos em azul, na Figura ~\ref{fig:pareto_FDS_inverno}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo.}
+	\label{fig:FDS_inverno_}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/pareto_Final_de_Semana_Transicao.png}
+		\caption{Soluções no espaço de soluções.}
+		\label{fig:pareto_FDS_transicao}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/Final_de_Semana_Transicao.png}
+		\caption{Medóides de cada um dos grupos da partição escolhida.}
+		\label{fig:FDS_transicao}
+	\end{subfigure}
+	\caption{Resultado final para os curvas diárias das cargas medidas nos dias do final de semana e nas estações de transição. Os pontos em azul, na Figura ~\ref{fig:pareto_FDS_transicao}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo}
+	\label{fig:FDS_transicao_}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/pareto_Dia_de_semana_Verao.png}
+		\caption{Soluções no espaço de soluções.}
+		\label{fig:pareto_DDS_verao}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/Dia_de_semana_Verao.png}
+		\caption{Medóides de cada um dos grupos da partição escolhida.}
+		\label{fig:DDS_verao}
+	\end{subfigure}
+	\caption{Resultado final para os curvas diárias das cargas medidas nos dias de semana e no verão. Os pontos em azul, na Figura ~\ref{fig:pareto_DDS_verao}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo}
+	\label{fig:DDS_verao_}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/pareto_Dia_de_semana_Inverno.png}
+		\caption{Soluções no espaço de soluções.}
+		\label{fig:pareto_DDS_inverno}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/Dia_de_semana_Inverno.png}
+		\caption{Medóides de cada um dos grupos da partição escolhida.}
+		\label{fig:DDS_inverno}
+	\end{subfigure}
+	\caption{Resultado final para os curvas diárias das cargas medidas nos dias de semana e no inverno. Os pontos em azul, na Figura ~\ref{fig:pareto_DDS_inverno}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo}
+	\label{fig:DDS_inverno_}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/pareto_Dia_de_semana_Transicao.png}
+		\caption{Soluções no espaço de soluções.}
+		\label{fig:pareto_DDS_transicao}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{figuras/australia_5000/Dia_de_semana_Transicao.png}
+		\caption{Medóides de cada um dos grupos da partição escolhida.}
+		\label{fig:DDS_transicao}
+	\end{subfigure}
+	\caption{Resultado final para os curvas diárias das cargas medidas nos dias de semana e na transição. Os pontos em azul, na Figura ~\ref{fig:pareto_DDS_transicao}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo}
+	\label{fig:DDS_transicao_}
+\end{figure}
+
+\section{Análise dos resultados}
+
+A abordagem tradicional do agrupamento, com a combinação mais promissora apontada no Capítulo ~\ref{cap:testes_teoricos}, resultou em partições altamente desbalanceadas, o que não é adequado do ponto de vista prático para a descoberta de perfis e segmentação de consumidores residenciais. Foi então proposta uma metodologia que consiga encontrar partições dos dados que consiga estabelecer um compromisso entre o balanceamento da partição, e a qualidade da mesma, ou seja, partições com alta densidade intergrupo e sem a presença de um grupo que contém quase a totalidade das instâncias.
+
+Diferentemente dos resultados obtidos no capítulo \ref{cap:testes_teoricos}, onde se tinha disponível a rotulação dos dados, e os melhores resultados foram obtidos com os algoritmos hierárquicos e métrica de dissimilaridade CID-DTW, neste estudo de caso, o conjunto de dados não possui rotulação, as partições obtidas por meio do algoritmo k-means aliado à métrica euclidiana foram os que alcançaram os resultados mais satisfatórios. As demais combinações testadas de algoritmo e métrica de dissimilaridade acarretaram em partições altamente desbalanceadas. Das $684$ partições obtidas ao se variar o algoritmo de agrupamento, a métrica de dissimilaridade e o número de grupos, após a seleção de partições cujo maior grupo representava menos de 50\% dos medidores e o menor mais do que 5\%, o número de soluções disponíveis foi reduzido drasticamente. Isso pode ser percebido nos gráficos do espaço de soluções ~\ref{fig:pareto_DDS_transicao},  ~\ref{fig:pareto_DDS_inverno}, ~\ref{fig:pareto_DDS_verao}, ~\ref{fig:pareto_FDS_transicao}, ~\ref{fig:pareto_FDS_inverno} e ~\ref{fig:pareto_FDS_verao}, já que, em cada um deles, existem aproximadamente $20$ soluções possíveis das $684$ iniciais.
+
+Assim, pode-se inferir que o algoritmo \emph{k-means} é o mais adequado, no contexto de agrupamento de curvas de carga, quando se deseja obter partições balanceadas. Outro resultado que parece interessante é o fato do número de grupos encontrado ser maior nos conjuntos de dados obtidos a partir do final de semana. Nestes, o valor de $k$ foi em torno de $9$, ao passo que nos conjuntos de dados contendo medições realizadas nos dias de semana, o número $k$ foi igual a 3. Isso leva a crer que durante o final de semana a diversidade de perfis de consumo de carga aumenta em relação aos dias de semana. Além disso, este estudo indica que este fator, o tipo de dia de semana, tem maior impacto no número de grupos $k$ do que a variação das estações do ano. Isto pode ser dito no contexto australiano, pois, caso este estudo de caso fosse realizado em países cuja variação de temperatura é maior em função da variação da estação do ano, como nos países do hemisfério norte, os resultados poderiam ser diferentes.
+
+Em relação aos perfis de consumo em cada subconjunto, pode-se perceber, pelas Figuras  ~\ref{fig:DDS_transicao},  ~\ref{fig:DDS_inverno}, ~\ref{fig:DDS_verao}, ~\ref{fig:FDS_transicao}, ~\ref{fig:FDS_inverno} e ~\ref{fig:FDS_verao}, que:
+\begin{itemize}
+	\item na maioria dos perfis característicos, as curvas têm um crescimento abrupto aproximadamente na décima segunda medição (às 6 horas da manhã),
+	\item na maioria dos perfis característicos, as curvas têm um decrescimento abrupto aproximadamente na quadragésima medição (às 20 horas da noite),
+	\item na maioria dos perfis característicos dos finais de semana, as curvas apresentam um vale centrado na vigésima quarta medição (às 12 horas),
+	\item os perfis de dia de semana no verão (vide Figura ~\ref{fig:DDS_verao}) e nos meses de transição (vide Figura ~\ref{fig:DDS_transicao}) são bastante similares, o que reforça a suposição de que nas residências australianas a variação da estação do ano não influencia no comportamento de consumo de energia elétrica dos australianos, mas o tipo de dia de semana sim, além de ambos apresentarem uma tendência de crescimento durante o dia,
+	\item no inverno e dia de semana (vide Figura ~\ref{fig:DDS_inverno}), existem alguns perfis que divergem significativamente dos demais, apresentando picos significativos de consumo,
+\end{itemize}
+todas essas observações são, de certa forma esperadas para curvas de carga de residências, o que mostra que os resultados são coerentes. No entanto, a interpretação das curvas aliado à outros dados dos consumidores que compõem cada grupo dos subconjuntos em análise, tais como a renda, localização, número de moradores, dentre outros, poderiam gerar informações mais ricas e úteis para as concessionárias de energia.
+
+Há de se destacar que a estratégia implementada neste estudo de caso foi realizada em uma base de dados reduzida, com 427 cargas, e dessa maneira foi possível realizar as $684$ partições diferentes de cada um dos seis conjuntos de dados com um esforço computacional moderado. O agrupamento dos dados gerados por medidores inteligentes instalados por uma concessionária de energia elétrica como a CEMIG, que possui milhões de consumidores residenciais ~\parencite{DadosCemig}, demandará um custo computacional relevante. Assim, em um cenário real, após a massificação da instalação de medidores inteligentes no sistema elétrico de potência brasileiro, é mister que seja definida uma única abordagem, em relação à escolha do algoritmo e métrica de dissimilaridade.
+
+Assim, pelos resultados obtidos, sugere-se que o agrupamento de curvas de cargas residenciais seja realizado, após a normalização max, por meio do algoritmo \emph{k-means} e métrica de dissimilaridade euclidiana. Esse resultado vai de encontro com a literatura ~\parencite{Chicco}. Sugere-se ainda que caso seja feita a mesma divisão dos dados realizados neste estudo de caso, ou seja, em tipos de dia da semana e em estações do ano, que o parâmetro $k$ do algoritmo \emph{k-means} seja aproximadamente igual à 3 para os conjuntos de dados contendo medições nos dias de semana, e aproximadamente $10$ para os dias dos finais de semana. 
+
+A indicação algoritmo k-means para a realização do agrupamento de curvas de carga, por gerar partições que possuem um bom compromisso entre balanceamento dos grupos e qualidade da partição, possui ainda a vantagem deste ser um algoritmo altamente escalável, ou em outras palavras,  altamente paralelizável ~\parencite{zhao2009parallel, stoffel1999parallel, bahmani2012scalable}, tanto localmente quanto distribuidamente, o que, por sua vez, também é adequado para uma massa de dados de milhões de consumidores.

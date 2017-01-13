@@ -1,0 +1,12 @@
+\begin{tabular}{lllllllrrrrrr}
+\toprule
+{} & norm &    method & is\_weekday & season &        alg &              dis &   k &       max &      mean &       min &  silhouette &       std \\
+\midrule
+292  &  max &  centroid &      False &      T &    k-means &      minkowski\_2 &   9 &  0.175644 &  0.111111 &  0.067916 &    0.124528 &  0.032075 \\
+977  &  max &  centroid &      False &      W &    k-means &      minkowski\_2 &  10 &  0.142857 &  0.100000 &  0.060890 &    0.113796 &  0.026455 \\
+1659 &  max &  centroid &      False &      S &    k-means &      minkowski\_2 &   8 &  0.189696 &  0.125000 &  0.065574 &    0.115326 &  0.034893 \\
+2262 &  max &  centroid &       True &      T &  k-medoids &  cid-minkowski\_2 &   3 &  0.360656 &  0.333333 &  0.306792 &    0.066607 &  0.021997 \\
+3028 &  max &  centroid &       True &      W &    k-means &      minkowski\_2 &   9 &  0.152225 &  0.111111 &  0.060890 &    0.126416 &  0.026659 \\
+3706 &  max &  centroid &       True &      S &    k-means &      minkowski\_2 &   3 &  0.355972 &  0.333333 &  0.295082 &    0.165268 &  0.027199 \\
+\bottomrule
+\end{tabular}
