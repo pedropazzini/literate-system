@@ -2,7 +2,7 @@
 
 Por agrupamento, entende-se a tarefa de dividir um conjunto de dados em grupos homogêneos e bem definidos. A partir de determinada métrica de dissimilaridade, o agrupamento busca formar grupos que contêm dados que possuem baixa dissimilaridade entre si, ao passo que estes possuem alta dissimilaridade com os dados contidos nos demais grupos. O agrupamento se faz necessário quando não se possui, \emph{a priori}, a rotulação dos dados, ou seja, não se sabe a qual grupo cada instância pertence, e em alguns casos, não se sabe até mesmo o número de grupos que as instâncias estão naturalmente contidas. A partir da realização de tal tarefa, espera-se adquirir conhecimento acerca da estrutura dos dados bem como extrair informação útil dos mesmos.
 
-O agrupamento pode ser feito em dados textuais, categóricos, binários, numéricos, ordinais, relacionais, temporais, espaço-temporais, ou qualquer combinação destes. Quando o agrupamento é realizado em dados nos quais as suas características não variam com o tempo, os dados são considerados estáticos, e caso contrário os dados são ditos dinâmicos. As séries temporais, que são objeto de estudo deste trabalho, são dados dinâmicos. Grande parte da pesquisa de agrupamento se dá na análise de dados estáticos, no entanto, existe uma tendência de crescimento no estudo em séries temporais devido às diversas aplicações nas engenharias, mercado financeiro, marketing, medicina, biologia, meteorologia, astronomia entre outros ~\parencite{Liao}.
+O agrupamento pode ser feito em dados textuais, categóricos, binários, numéricos, ordinais, relacionais, temporais, espaço-temporais, ou qualquer combinação destes. Quando o agrupamento é realizado em dados nos quais a observação das grandezas de interesse não variam com o tempo, os dados são considerados estáticos, e caso contrário os dados são ditos dinâmicos. As séries temporais, que são objeto de estudo deste trabalho, são dados dinâmicos. Grande parte da pesquisa de agrupamento se dá na análise de dados estáticos, no entanto, existe uma tendência de crescimento no estudo em séries temporais devido às diversas aplicações nas engenharias, mercado financeiro, marketing, medicina, biologia, meteorologia, astronomia entre outros ~\parencite{Liao}.
 
 Formalmente, uma partição $\mathcal{C}$ é a partição de um conjunto de dados $X$ composto por $n$ instâncias, e cada instância possuindo $d$ características, em $k$ sub-conjuntos mutualmente disjuntos, $\mathcal{C}_1,\mathcal{C}_2,...,\mathcal{C}_k$. A esses sub-conjuntos dá-se o nome de grupos. Dessa maneira,
 
@@ -71,7 +71,8 @@ A primeira é utilizada, em geral, quando os valores observados das séries temp
 	\label{fig:norms}
 \end{figure}
 
-\subsection{\emph{Piecewise aggregate approximation} - PAA}
+\subsection{\emph{Piecewise aggregate approximation} - 
+	PAA}
 
 A \emph{Piecewise aggregate approximation} é uma técnica de redução de dimensionalidade na qual, basicamente, a série temporal é dividida em $w$ janelas de tamanhos iguais e o valor da série neste intervalo é definido como o valor médio da série no intervalo compreendido pela janela ~\parencite{SAX}. Assim, dada uma série temporal $\bm{x} = x_1,x_2,...,x_n$ de tamanho $n$, esta pode ser representada em  um espaço $w$ dimensional, sendo $w<n$, por um vetor $\bm{\bar{x}} =\bar{x_1},\bar{x_2},...,\bar{x_w} $, tal que seu $i$-ésimo elemento é dado por
 
@@ -81,7 +82,7 @@ A \emph{Piecewise aggregate approximation} é uma técnica de redução de dimen
 %\begin{equation}
 %	\bar{x_i} = \frac{w}{n} \mathop{\mathlarger{\mathlarger{\mathlarger{\mathlarger{\sum}}}}}_{j=\frac{n}{w}(i-1)+1}^{\frac{n}{w}i} x_j.
 %\end{equation}
-Na figura \ref{fig:PAA} pode ser vista a redução de dimensionalidade da senoide em azul formada por 315 pontos para a curva em vermelho, formada por 19 pontos.
+Na figura \ref{fig:PAA} pode ser vista a redução de dimensionalidade da senoide em azul formada por 315 pontos para a curva em vermelho, formada por 19 pontos. Em ~\parencite{fuzzy_transform} é sugerida uma técnica de redução de dimensionalidade de séries temporais que pode ser vista como uma versão fuzzy da PAA. Basicamente, a ideia é definir uma partição fuzzy para o espaço de entrada e definir um coeficiente para cada valor da partição.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{figuras/PAA.png}
@@ -185,7 +186,7 @@ Existem diversas métricas de dissimilaridade para comparar duas séries tempora
 
 Nas subseções seguintes desta seção, encontram-se algumas métricas que atendem à todas ou à algumas dessas propriedades e que serão detalhadas em cada uma das características já expostas e esperadas de uma métrica de similaridade entre duas séries temporais. Ao fim do capítulo se encontra a Tabela ~\ref{tbl:dissimlarity_summary_table} que sumariza todas  as informações discutidas nesta seção. 
 
-Vale mencionar, neste momento, que existem métricas de dissimilaridade obtidas por meio de modelos estatísticos das séries temporais que sejam representativos de cada uma das séries temporais a serem comparadas. Supõe-se que elas foram geradas por modelos paramétricos, sendo o modelo ARIMA um dos modelos mais utilizados. A obtenção da medida de dissimilaridade entre as séries se dá a partir da comparação entre esses modelos. As métricas obtidas a partir de modelos estatísticos possuem aplicação maior em agrupamentos de séries temporais baseados na predição delas, e por isso não serão abordadas nesta dissertação de mestrado. No entanto, algumas das abordagens neste sentido, assim como outras referências, podem ser encontradas em ~\parencite{TSCLUST}.
+Vale mencionar, neste momento, que existem métricas de dissimilaridade obtidas por meio de modelos estatísticos das séries temporais que sejam representativos de cada uma das séries temporais a serem comparadas. Supõe-se que elas foram geradas por modelos paramétricos, sendo o modelo ARIMA um dos modelos mais utilizados. A obtenção da medida de dissimilaridade entre as séries se dá a partir da comparação entre os parâmetros desses modelos. As métricas obtidas a partir de modelos estatísticos possuem aplicação maior em agrupamentos de séries temporais baseados na predição delas, não sendo assim, em geral, aplicáveis à problemas de agrupamento de curvas de carga, e por isso não serão abordadas nesta dissertação de mestrado. No entanto, algumas das abordagens neste sentido, assim como outras referências, podem ser encontradas em ~\parencite{TSCLUST}.
 
 \subsection{Minkowski}
 
@@ -202,7 +203,7 @@ A métrica de Minkowski é também conhecida como norma $L_p$, e tem como casos 
 	  \label{fig:dist_euclidiana}
 \end{figure}
 
-Na figura ~\ref{fig:dist_euclidiana} encontram-se duas séries temporais, na tabela ~\ref{minkowski_table} os valores de distância obtidos variando-se o valor de $p$. A métrica de Minkowski atende à todas as propriedades das métricas de distância e, dessa maneira, pode ser considerada uma distância, e o seu custo computacional é $\mathcal{O}(n)$, onde $n$ é o número de amostras ou observações das séries a serem comparadas.
+Na figura ~\ref{fig:dist_euclidiana} encontram-se duas séries temporais, na tabela ~\ref{minkowski_table} os valores de distância obtidos variando-se o valor de $p$. Pela tabela, pode-se notar que pequenas variações no valor de $p$ acarretam em grandes variações no valor da métrica, bem como que este valor diminui ao passo que $p$ aumenta.A métrica de Minkowski atende à todas as propriedades das métricas de distância e, dessa maneira, pode ser considerada uma distância, e o seu custo computacional é $\mathcal{O}(n)$, onde $n$ é o número de amostras ou observações das séries a serem comparadas.
 
 
 \begin{table}[]
@@ -605,16 +606,16 @@ Dada uma métrica de dissimilaridade e um conjunto de dados, existem diferentes 
 
 \begin{enumerate}
 	\item  algoritmos hierárquicos ou aglomerativos, nos quais, inicialmente, cada instância representa um grupo formado por apenas ela mesma, e a partir daí os grupos são combinados sucessivamente a partir de um critério que leva em conta a dissimilaridade entre os grupos,
-	\item algoritmos particionais, ou de atribuição de pontos, nos quais cada ponto, ou instância, é atribuído inicialmente à um grupo de uma solução inicial. Em seguida, os pontos são iterativamente realocados entre os grupos, até determinado critério de parada para a obtenção da partição final.
+	\item algoritmos particionais, ou de atribuição de pontos, nos quais cada ponto, ou instância, é atribuído inicialmente à um grupo de uma solução inicial. Em seguida, os pontos são iterativamente realocados entre os grupos, até determinado critério de parada para a obtenção da partição final. Quando os pontos são atribuídos a somente um grupo, dá-se o nome de \emph{hard-clustering}, enquanto quando atribui-se graus de pertinência do ponto à cada um dos grupos, têm-se o \emph{soft-clustering}, ou \emph{fuzzy clustering}.
 \end{enumerate}
-Cada uma das estratégias mencionadas acima podem ser novamente divididas em:
+No que diz respeito ao uso de memória secundária (memória RAM), os algoritmos de agrupamento podem ser, também, divididos em:
 
 \begin{enumerate}
 	\item algoritmos que assumem que as instâncias se encontram no espaço euclidiano, ou seja, que a métrica de dissimilaridade utilizada é a distância Euclidiana. Essa distinção existe pois no espaço euclidiano existe o conceito de centróide, que é o ponto médio das instâncias que compõem o grupo, e este ponto é tido como o ponto mais representativo deste. Note que este ponto mais representativo não é, necessariamente, um ponto do conjunto de dados. Assim, em espaços não euclidianos, tal conceito de um ponto médio não existe e, dessa maneira, deve-se utilizar outras estratégias para se definir um ponto representativo dos grupos.
 	\item algoritmos que assumem que os dados são pequenos, o suficiente, no que diz respeito ao consumo de memória, para serem armazenados na memória RAM. Caso isso não seja verdade, outras estratégias já partem do pressuposto que é inviável mensurar a dissimilaridade entre todos os pontos, de maneira que diversos algoritmos já são descartados. 
 \end{enumerate}
 
-Além dos critérios supracitados, os algoritmos de agrupamento podem, ainda, serem classificados em: aqueles baseados em características, nos quais exigem como entrada uma matriz $NxD$ contento os dados, que são formados por $N$ instâncias, sendo cada uma composta por $D$ características, e os algoritmos de agrupamento baseados em dissimilaridades, os quais esperam uma matriz simétrica $NxN$, onde o elemento $ij$ desta matriz contém a dissimilaridade entre o i-ésimo e o j-ésimo elemento da matriz $NxD$ que contém as instâncias. A seguir seguem breves comentários de alguns dos principais algoritmos de agrupamento.
+Além dos critérios supracitados, os algoritmos de agrupamento podem, ainda, serem classificados em: aqueles baseados em características, nos quais exigem como entrada uma matriz $NxD$ contento os dados, que são formados por $N$ instâncias, sendo cada uma composta por $D$ características, e os algoritmos de agrupamento baseados em dissimilaridades, os quais esperam uma matriz simétrica $NxN$, onde o elemento $ij$ desta matriz contém a dissimilaridade entre o i-ésimo e o j-ésimo elemento da matriz $NxD$ que contém as instâncias. A seguir seguem breves comentários de alguns dos principais algoritmos de agrupamento utilizados no contexto de agrupamento de séries temporais.
 
 \subsection{Algoritmos particionais}
 
