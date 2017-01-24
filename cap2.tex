@@ -23,7 +23,7 @@ Este capítulo se encontra estruturado de forma a realizar um estudo de cada um 
 
  Em seguida, são analisadas as métricas de dissimilaridade de séries temporais que podem ser divididas em: métricas baseadas em distâncias ou dissimilaridades, aplicadas no espectro das séries temporais e em modelos estatísticos ~\parencite{Liao}. Pelo fato da escolha de uma métrica de dissimilaridade ser um dos aspectos centrais na tarefa de agrupamento  de séries temporais as principais métricas apresentadas na literatura são discutidas na maior parte deste capítulo.
  
- A escolha da métrica de dissimilaridade se dá pela definição de um critério, ou métrica , que nos diga o quão similares duas instâncias são. Tal métrica é dependente do objetivo principal da tarefa de agrupamento. Existem determinadas aplicações que realizam o agrupamento baseado no valor da predição da série temporal, ou seja, as curvas são agrupadas em função do próximo valor esperado de cada série, enquanto em outras aplicações, quando se deseja comparar o formato das séries, o uso de métricas ponto a ponto se adequa melhor. Existam ainda outras abordagens que buscam agrupar curvas que possuam o mesmo comportamento ou tendência, ou seja, curvas que se mantêm constante, aumentam ou diminuem o seu valor em períodos de tempo próximos.
+ A escolha da métrica de dissimilaridade se dá pela definição de um critério, ou métrica , que nos diga o quão similares duas instâncias são. Tal métrica é dependente do objetivo principal da tarefa de agrupamento. Existem determinadas aplicações que realizam o agrupamento baseado no valor da predição da série temporal, ou seja, as curvas são agrupadas em função do próximo valor esperado de cada série, enquanto em outras aplicações, quando se deseja comparar o formato das séries, o uso de métricas ponto a ponto se adequa melhor. Existem ainda outras abordagens que buscam agrupar curvas que possuam o mesmo comportamento ou tendência, ou seja, curvas que se mantêm constante, aumentam ou diminuem o seu valor em períodos de tempo próximos.
 
 Após a discussão das métricas, serão expostos os principais algoritmos de agrupamento de séries temporais disponíveis na literatura. Estes algoritmos podem ser estocásticos como o \emph{k-means}, \emph{k-medoids}, ou de agrupamento hierárquico com diferentes tipos de \emph{linkagem}, tais como: a \emph{average}, \emph{complete} ou \emph{ward}. Existem também os algoritmos de agrupamento baseados em densidade, como o \emph{DBSCAN}, que possuem a vantagem de, não ser necessária a definição, \emph{a priori}, do número de grupos.
 
@@ -33,7 +33,7 @@ Tal revisão bibliográfica é importante para a definição da melhor estratég
 
 \section{Pré-processamento de séries temporais}
 
-Antes da tarefa de agrupamento em si, recomenda-se a realização de uma fase de pré-processamento dos dados, nos quais eles são normalizados. A normalização é utilizada para corrigir possíveis distorções que o dados brutos podem apresentar devido ao seu processo de aquisição. Pode-se corrigir distorções relacionadas a escala, translação, rotação, diferença de fase, entre outras.
+Antes da tarefa de agrupamento em si, recomenda-se a realização de uma fase de pré-processamento dos dados, nos quais eles são normalizados. A normalização é utilizada para corrigir possíveis distorções que o dados brutos podem apresentar devido ao seu processo de aquisição. Pode-se corrigir distorções relacionadas à escala, translação, rotação, diferença de fase, entre outras.
 
 Além da normalização, métricas de dissimilaridade podem ser aplicadas no espectro das séries temporais, como uma estratégia de redução de dimensionalidade, para a posterior realização da tarefa de agrupamento. Tal redução é desejada, pela ocorrência do "mal da dimensionalidade", que basicamente nos diz que quando o número de dimensões de cada instância de um conjunto de dados é muito grande, as instâncias tendem a se encontrar espaçadas e equidistantes, fazendo com que seja necessário um número muito grande de instâncias para a construção de uma fronteira de decisão ~\parencite{DudaHart}. Dessa maneira, faz-se necessária um etapa de pré-processamento, e as principais abordagens se encontram detalhadas a seguir.
 
@@ -45,7 +45,7 @@ Estudos demonstram que qualquer tarefa de mineração de dados de séries tempor
 \hat{x_i} = \frac{x_i - \mu}{\sigma}, i = 1,...,n.
 \end{equation}
 
-No contexto de séries temporais, a normalização Z é extremamente importante para remover certas imperfeições e diferenças de escala que surgem a partir da geração das séries temporais, sejam estas obtidas por meio de medições ou de algum tipo de transformação de dados. Na figura ~\ref{fig:z_norm} podem ser vistas duas senoides, $s1$ e $s2$, ligeiramente defasadas mas com diferença significativa em amplitude e valor médio, ou \emph{offset}. Na mesma figura, as suas respectivas versões normalizadas podem ser vistas pelas linhas tracejadas. É notável que as curvas tracejadas são bem mais semelhantes entre si, e caso as diferenças de amplitude e valor médio não sejam relevantes para a tarefa de agrupamento ou classificação, o que é geralmente o caso, então a normalização Z é uma etapa de pré-processamento obrigatória.
+No contexto de séries temporais, a normalização Z é extremamente importante para remover certas imperfeições e diferenças de escala que surgem a partir da geração das séries temporais, sejam estas obtidas por meio de medições ou de algum tipo de transformação de dados. Na figura ~\ref{fig:z_norm} podem ser vistas duas senoides, $s1$ e $s2$, ligeiramente defasadas mas com diferença significativa em amplitude e valor médio, ou \emph{offset}. Na mesma figura, as suas respectivas versões normalizadas podem ser vistas pelas linhas tracejadas. É notável que as curvas tracejadas são bem mais semelhantes entre si, e caso as diferenças de amplitude e valor médio não sejam relevantes para a tarefa de agrupamento ou classificação, o que é geralmente o caso, então a normalização Z é uma etapa de pré-processamento recomendada.
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{figuras/z_norm.png}
 	\caption{Exemplo de normalização Z. As duas senóides s1 e s2 que possuem comportamento semelhante mas, devido à diferença de \emph{offsets} e  amplitudes, se apresentam significativamente distintas. Após a aplicação da normalização Z em cada uma delas (z-s1 e z-s2), elas são praticamente idênticas, }
@@ -64,7 +64,7 @@ Além da normalização Z, podem ser utilizadas também as normalizações max e
 \end{equation}
 
 A primeira é utilizada, em geral, quando os valores observados das séries temporais que compõem o conjunto de dados são sempre positivas, e confina a série no intervalo $[0,1]$ dividindo cada valor pelo maior valor observado em toda série. Já a segunda, também confina a série no intervalo $[0,1]$, mas necessariamente seu menor valor se torna $0$, o que nem sempre ocorre na primeira. Os efeitos de ambas normalizações podem ser vistos na figura ~\ref{fig:norms}. Como os valores de medição dos medidores inteligentes são sempre positivos, a normalização max é muito utilizada na mineração de dados de Redes Elétricas Inteligentes ~\parencite{Chicco}.
-
+\textbf{}
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{figuras/normalizations.png}
 	\caption{Exemplos de normalização max e min-max.}
@@ -74,7 +74,7 @@ A primeira é utilizada, em geral, quando os valores observados das séries temp
 \subsection{\emph{Piecewise aggregate approximation} - 
 	PAA}
 
-A \emph{Piecewise aggregate approximation} é uma técnica de redução de dimensionalidade na qual, basicamente, a série temporal é dividida em $w$ janelas de tamanhos iguais e o valor da série neste intervalo é definido como o valor médio da série no intervalo compreendido pela janela ~\parencite{SAX}. Assim, dada uma série temporal $\bm{x} = x_1,x_2,...,x_n$ de tamanho $n$, esta pode ser representada em  um espaço $w$ dimensional, sendo $w<n$, por um vetor $\bm{\bar{x}} =\bar{x_1},\bar{x_2},...,\bar{x_w} $, tal que seu $i$-ésimo elemento é dado por
+A \emph{Piecewise aggregate approximation} é uma técnica de redução de dimensionalidade na qual, basicamente, a série temporal é dividida em $w$ janelas de tamanhos iguais e o valor da série neste intervalo é definido como o valor médio da série no intervalo compreendido pela janela ~\parencite{SAX}. Assim, dada uma série temporal $\bm{x} = x_1,x_2,...,x_n$ de tamanho $n$, esta pode ser representada em  um espaço $w$ dimensional, sendo $w<n$ e $w$ múltiplo inteiro de $n$, por um vetor $\bm{\bar{x}} =\bar{x_1},\bar{x_2},...,\bar{x_w} $, tal que seu $i$-ésimo elemento é dado por
 
 \begin{equation}
 	\bar{x_i} = \frac{w}{n} \sum_{j=\frac{n}{w}(i-1)+1}^{\frac{n}{w}i} x_j.
@@ -206,7 +206,7 @@ A métrica de Minkowski é também conhecida como norma $L_p$, e tem como casos 
 Na figura ~\ref{fig:dist_euclidiana} encontram-se duas séries temporais, na tabela ~\ref{minkowski_table} os valores de distância obtidos variando-se o valor de $p$. Pela tabela, pode-se notar que pequenas variações no valor de $p$ acarretam em grandes variações no valor da métrica, bem como que este valor diminui ao passo que $p$ aumenta.A métrica de Minkowski atende à todas as propriedades das métricas de distância e, dessa maneira, pode ser considerada uma distância, e o seu custo computacional é $\mathcal{O}(n)$, onde $n$ é o número de amostras ou observações das séries a serem comparadas.
 
 
-\begin{table}[]
+\begin{table}[!h]
 	\centering
 	\caption{Distâncias Minkowski entre as curvas da figura ~\ref{fig:dist_euclidiana} para diversos valores de $p$.}
 	\label{minkowski_table}
@@ -226,7 +226,7 @@ Na figura ~\ref{fig:dist_euclidiana} encontram-se duas séries temporais, na tab
 
 A \emph{Dynamic Time Warping} é, talvez, a métrica de dissimilaridade mais utilizada para dados de séries temporais. Proposta inicialmente para ser utilizada em problemas de detecção de fala, a DTW se mostrou útil para tarefas de mineração de dados em séries temporais ~\parencite{DTW}.
 
-Dada duas séries temporais $\bm{x} = x_1,x_1,x_3,...,x_i,...,,x_n$ e $\bm{y} = y_1,y_2,y_3,...,y_j,...,,y_m$, suponha que seja feito a construção de um \emph{grid} $n_{x}m$, no qual na posição $(i,j)$ se encontra o valor resultante de uma métrica de distância $\delta(i,j)$ entre os pontos $x_i$ e $y_j$. Tal métrica pode ser, por exemplo, a já citada distância Minkowski. A partir deste \emph{grid}, é construído um caminho $W=w_1,w_2,w_3,...,w_k$, onde cada $w_k$ corresponde à alguma posição $(i,j)_k$ do grid, tal que a distância DTW entre as séries $\bm{x}$ e $\bm{y}$, definida por esse caminho, seja minimizada:
+Dada duas séries temporais $\bm{x} = x_1,x_1,x_3,...,x_i,...,x_n$ e $\bm{y} = y_1,y_2,y_3,...,y_j,...,y_m$, suponha que seja feito a construção de um \emph{grid} $n_{x}m$, no qual na posição $(i,j)$ se encontra o valor resultante de uma métrica de distância $\delta(i,j)$ entre os pontos $x_i$ e $y_j$. Tal métrica pode ser, por exemplo, a já citada distância Minkowski. A partir deste \emph{grid}, é construído um caminho $W=w_1,w_2,w_3,...,w_k$, onde cada $w_k$ corresponde à alguma posição $(i,j)_k$ do grid, tal que a distância DTW entre as séries $\bm{x}$ e $\bm{y}$, definida por esse caminho, seja minimizada:
 
 \begin{equation}
 DTW(\bm{x},\bm{y}) = min_W[\sum_{k=1}^{p}\delta(w_k)]
@@ -273,7 +273,7 @@ A DTW não pode ser considerada uma métrica de distância pois não obedece à 
 
 Na literatura, a distância Euclidiana é uma das abordagens mais utilizadas para o agrupamento em geral, no entanto, em alguns casos nos quais os dados são séries temporais, ela pode apresentar resultados incoerentes ao se definir a similaridade entre duas séries temporais. Para discutir tal afirmação, os experimentos realizados em ~\parencite{FalhaEuclideana} serão reproduzidos aqui. 
 
-\begin{table}[]
+\begin{table}[!h]
 	\centering
 	\caption{Distâncias euclidiana e DTW entre as curvas da figura ~\ref{fig:euclidiana_falha}.}
 	\label{euclidiana_vs_DTW}
@@ -399,7 +399,7 @@ Em ~\parencite{mahalanobisClassification}, foi realizado um estudo de classifica
 
 \subsection{Distâncias baseadas na correlação de Pearson}
 
-A correlação de Pearson entre duas séries temporais $\bm{x}$ e $\bm{y}$ te tamanho $n$ é dada por
+A correlação de Pearson entre duas séries temporais $\bm{x}$ e $\bm{y}$ de tamanho $n$ é dada por
 
 \begin{equation} \label{d_COR}
 COR (\bm{x},\bm{y}) = \frac{\sum_{i}^{n}(x_i-\bm{\bar{x}}) (y_i-\bm{\bar{y}})}{\sqrt{\sum_{i}^{n}(x_i-\bm{\bar{x}})^2}\sqrt{\sum_{i}^{n}(y_i-\bm{\bar{y}})^2}},
@@ -439,7 +439,7 @@ onde $dist_Q$ é a distância convencional entre as séries e $f(.)$ é a funç�
 \begin{equation} \label{eq:tunning_func}
 f(x) = \frac{2}{1+\exp(\gamma x)},\text{ 				} \gamma \geq 0,
 \end{equation}
-onde $\gamma$ é um parâmetro de controle que controla o quanto o aspecto temporal deve influenciar na métrica de distância. Valores grandes de $\gamma$ fazem com que o valor fornecido por $dist_Q$ seja mais penalizado, ou atenuado, quanto se obtém valores não nulos de correlação temporal entre as séries. Tal comportamento da função de sintonia bem como a influência do parâmetro $\gamma$ podem ser vistos na figura ~\ref{fig:tunning_cort}.
+onde $\gamma$ é um parâmetro de controle que controla o quanto o aspecto temporal deve influenciar na métrica de distância. Valores grandes de $\gamma$ fazem com que o valor fornecido por $dist_Q$ seja mais penalizado, ou atenuado, quando se obtém valores não nulos de correlação temporal entre as séries. Tal comportamento da função de sintonia bem como a influência do parâmetro $\gamma$ podem ser vistos na figura ~\ref{fig:tunning_cort}.
 
 Em ~\parencite{cort} são feitos experimentos com séries temporais reais e sintéticas, utilizando-se métricas baseadas na correlação de Pearson e na correlação temporal, e como distâncias convencionais foram escolhidas a DTW e a distância Euclidiana. Após a realização do agrupamento das curvas por meio de algoritmos hierárquicos, utilizando-se as métricas citadas anteriormente, chegou-se à resultados superiores com a correlação temporal utilizando a similaridade DTW como distância convencional. Este resultado superior foi alcançado tanto para os conjuntos de dados sintéticos quanto para o conjunto de dados reais.
 
@@ -484,7 +484,7 @@ Este resultado é, em geral, o mesmo para outras métricas de dissimilaridade co
 	\label{fig:cid}
 \end{figure}
 
-\begin{table}[]
+\begin{table}[!h]
 	\centering
 	\caption{Medida de complexidade, como definida na equação ~\ref{eq:CE}, das curvas da figura ~\ref{fig:cid} e distâncias euclidiana e CID-euclidiana entre elas.}
 	\label{cid_table}
@@ -503,9 +503,9 @@ ts3 & 1.975 & 1.354 & 2.027 & 0.0 & 4.777 & 2.078  & 0.0\\
 
 \subsection{Discussão geral das métricas de dissimilaridade}
 
-Após a exposição das diversas métricas de dissimilaridade, faz-se necessária a sumarização de todas as informações nesta seção, que pode ser vista na Tabela ~\ref{tbl:dissimlarity_summary_table}, bem como de uma discussão geral acerca das métricas de dissimilaridade entre séries temporais. A escolha da métrica a ser utilizada no agrupamento depende sensivelmente do domínio do problema e de como a série temporal foi gerada. Para algumas aplicações, em que o formato da série é relevante, métricas que medem a dissimilaridade ponto a ponto são mais indicadas. Em contrapartida, para aplicações onde o interesse é verificar se as séries crescem ou decrescem de forma similar, independentemente do seu formato, métricas baseadas em correlação temporal são mais apropriadas. Alpem disso, as séries temporais a serem agrupadas, ou classificadas, podem possuir diversas distorções, devido à sua natureza ou pela maneira que elas foram obtidas, e isso deve ser levado em conta na escolha da métrica, uma vez que determinadas métricas são naturalmente invariantes a algumas distorções.. 
+Após a exposição das diversas métricas de dissimilaridade, faz-se necessária a sumarização de todas as informações nesta seção, que pode ser vista na Tabela ~\ref{tbl:dissimlarity_summary_table}, bem como de uma discussão geral acerca das métricas de dissimilaridade entre séries temporais. A escolha da métrica a ser utilizada no agrupamento depende sensivelmente do domínio do problema e de como a série temporal foi gerada. Para algumas aplicações, em que o formato da série é relevante, métricas que medem a dissimilaridade ponto a ponto são mais indicadas. Em contrapartida, para aplicações onde o interesse é verificar se as séries crescem ou decrescem de forma similar, independentemente do seu formato, métricas baseadas em correlação temporal são mais apropriadas. Além disso, as séries temporais a serem agrupadas, ou classificadas, podem possuir diversas distorções, devido à sua natureza ou pela maneira que elas foram obtidas, e isso deve ser levado em conta na escolha da métrica, uma vez que determinadas métricas são naturalmente invariantes a algumas distorções.
 
-Em problemas de mineração de dados de séries temporais, é desejável que a métrica de dissimilaridade e o pré-processamento escolhidos alcancem uma ou mais das seguintes invariâncias, que são detalhadas em \parencite{CID} e serão brevemente discutidas nas subseções a seguir. Vale ressaltar que ao se tentar remover algumas das distorções em um problema específico, resultados piores podem ser obtidos, de forma que cada conjunto de dados de séries temporais deve ser analisado antes de se definir quais invariâncias são necessárias para a comparação entre as séries temporais.
+Em problemas de mineração de dados de séries temporais, é desejável que a métrica de dissimilaridade e o pré-processamento escolhidos alcancem uma ou mais das seguintes invariâncias, que são detalhadas em \parencite{CID} e serão brevemente discutidas nas subseções seguintes. Vale ressaltar que ao se tentar remover algumas das distorções em um problema específico, resultados piores podem ser obtidos, de forma que cada conjunto de dados de séries temporais deve ser analisado antes de se definir quais invariâncias são necessárias para a comparação entre as séries temporais.
 
 \subsubsection{Invariância à amplitude/\emph{offset}}
 
@@ -513,7 +513,7 @@ Quando as séries temporais a serem comparadas são idênticas, mas medidas com 
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{figuras/invariancias/amplitude_offset.png}
-	\caption{À direita duas curvas, não normalizadas, que, quando comparadas, se parecem bastante distintas, quando na verdade não o são. À esquerda um eletrocardiograma, a ser comparado com um sinal de medição contínuo. As duas primeiras comparações têm um bom casamento, mas as subsequentes apresentam valores maiores em uma comparação ponto a ponto devido ao crescente \emph{offset} que a curva começa a apresentar. Extraído de ~\parencite{CID}}
+	\caption{À esquerda duas curvas, não normalizadas, que, quando comparadas, se parecem bastante distintas, quando na verdade não o são. À direita um eletrocardiograma, a ser comparado com um sinal de medição contínuo. As duas primeiras comparações têm um bom casamento, mas as subsequentes apresentam valores maiores em uma comparação ponto a ponto devido ao crescente \emph{offset} que a curva começa a apresentar. Extraído de ~\parencite{CID}}
 	\label{fig:inv_offset_amplitude}
 \end{figure}
 
@@ -544,13 +544,13 @@ A invariância ao defasamento é muito importante quando se compara duas séries
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{figuras/invariancias/defasamento.png}
-	\caption{Duas curvas que após sucessivas tentativas de defasamento de uma delas, possuem casamento ótimo. Extraído de ~\parencite{CID}.}
+	\caption{Duas curvas que após sucessivas tentativas de defasamento de uma delas, possuem casamento ótimo. Cada uma delas representa dados de radiação colhidos de uma estrela diferente. Extraído de ~\parencite{CID}.}
 	\label{fig:inv_defasamento}
 \end{figure}
 
 \subsubsection{Invariância à oclusão}
 
-Algumas séries temporais podem apresentar subsequências que não possuem valores observados, por algum erro na medição, ou pela própria característica do problema. A invariância à oclusão pode ser obtida ao se ignorar determinadas partes das séries temporais que não possuem casamento. Algumas métricas de dissimilaridade como a DTW e EDR são mais robustas à oclusão do que a distância Euclidiana. A comparação entre as séries temporais geradas a partir dos imagens de dois crânios, na qual se faz necessária a invariância à oclusão, pode ser vistas na Figura ~\ref{fig:inv_oclusao}.
+Algumas séries temporais podem apresentar subsequências que não possuem valores observados, por algum erro na medição, ou pela própria característica do problema. A invariância à oclusão pode ser obtida ao se ignorar determinadas partes das séries temporais que não possuem casamento. Algumas métricas de dissimilaridade como a DTW e EDR são mais robustas à oclusão do que a distância Euclidiana. A comparação entre as séries temporais geradas a partir das imagens de dois crânios, na qual se faz necessária a invariância à oclusão, pode ser vistas na Figura ~\ref{fig:inv_oclusao}.
 
 \begin{figure}[h!]
 	\includegraphics[width=\linewidth]{figuras/invariancias/oclusao.png}
@@ -573,7 +573,7 @@ A complexidade de uma série temporal, como definida na seção \ref{sec:CID}, d
 	\label{fig:cid_2}
 \end{figure}
 
-\begin{table}[]
+\begin{table}[!h]
 	\centering
 	\caption{Sumário das métricas de dissimilaridades discutidas em ~\ref{sec:metricas}.}
 	\label{tbl:dissimlarity_summary_table}
@@ -608,7 +608,7 @@ Dada uma métrica de dissimilaridade e um conjunto de dados, existem diferentes 
 	\item  algoritmos hierárquicos ou aglomerativos, nos quais, inicialmente, cada instância representa um grupo formado por apenas ela mesma, e a partir daí os grupos são combinados sucessivamente a partir de um critério que leva em conta a dissimilaridade entre os grupos,
 	\item algoritmos particionais, ou de atribuição de pontos, nos quais cada ponto, ou instância, é atribuído inicialmente à um grupo de uma solução inicial. Em seguida, os pontos são iterativamente realocados entre os grupos, até determinado critério de parada para a obtenção da partição final. Quando os pontos são atribuídos a somente um grupo, dá-se o nome de \emph{hard-clustering}, enquanto quando atribui-se graus de pertinência do ponto à cada um dos grupos, têm-se o \emph{soft-clustering}, ou \emph{fuzzy clustering}.
 \end{enumerate}
-No que diz respeito ao uso de memória secundária (memória RAM), os algoritmos de agrupamento podem ser, também, divididos em:
+Os algoritmos de agrupamento podem ser, ainda, classificados em:
 
 \begin{enumerate}
 	\item algoritmos que assumem que as instâncias se encontram no espaço euclidiano, ou seja, que a métrica de dissimilaridade utilizada é a distância Euclidiana. Essa distinção existe pois no espaço euclidiano existe o conceito de centróide, que é o ponto médio das instâncias que compõem o grupo, e este ponto é tido como o ponto mais representativo deste. Note que este ponto mais representativo não é, necessariamente, um ponto do conjunto de dados. Assim, em espaços não euclidianos, tal conceito de um ponto médio não existe e, dessa maneira, deve-se utilizar outras estratégias para se definir um ponto representativo dos grupos.
@@ -723,7 +723,7 @@ x_{med} = \arg \min_{x_i} \sum_{j=0}^{n} diss(x_i,x_j), \text{			}i=0,...,n
 
 Os algoritmos hierárquicos, possuem a vantagem de não ser necessário informar, \emph{a priori}, o número de grupos que os dados se encontram divididos, no entanto, em geral, possuem ordem de complexidade de  $\mathcal{O}(n^2log(n))$, onde $n$ é o número de instâncias, e esta complexidade é superior em relação aos algoritmos baseados em atribuição de pontos. Outra característica relevante dos algoritmos de agrupamento hierárquicos é que estes são determinísticos, ou seja, para uma mesma entrada, e mesmos parâmetros, sempre retornam a mesma partição. Eles conseguem trabalhar tanto com matrizes de características como com matrizes de dissimilaridade ~\parencite[][245]{Ullman}.
 
-Os algoritmos hierárquicos podem ser divididos em algoritmos divisivos ou aglomerativos. Nos primeiros, inicialmente é considerado um grande grupo que contém todos os dados e que é iterativamente particionado até que cada instância esteja contida em grupo formado única e exclusivamente por ela mesma. Já nos segundos ocorre o processo inverso, no qual, inicialmente, cada instância está contida única e exclusivamente em seu próprio grupo, e iterativamente os grupos são fundidos para formar um novo grupo, até que se tenha somente um grande grupo contendo todos os dados. O pseudocódigo de um algoritmo hierárquico aglomerativo se encontra detalhado em ~\ref{alg:aglomerative_clustering}.
+Os algoritmos hierárquicos podem ser divididos em algoritmos divisivos ou aglomerativos. Nos primeiros, inicialmente é considerado um grande grupo que contém todos os dados e que é iterativamente particionado até que cada instância esteja contida em grupo formado única e exclusivamente por ela mesma. Já nos algoritmos aglomerativos ocorre o processo inverso, no qual, inicialmente, cada instância está contida única e exclusivamente em seu próprio grupo, e iterativamente os grupos são fundidos para formar um novo grupo, até que se tenha somente um grande grupo contendo todos os dados. O pseudocódigo de um algoritmo hierárquico aglomerativo se encontra detalhado em ~\ref{alg:aglomerative_clustering}.
 
 O resultado de ambas as abordagens, é a estrutura de uma árvore binária chamada dendrograma, na qual as instâncias se encontram nas folhas da árvore e os ramos representam a união sucessiva das instâncias em um mesmo grupo. O tamanho do ramo que une dois grupos representa a distância, ou dissimilaridade, entre eles, de forma que ramos maiores representam uma maior distância entre os grupos. Dessa maneira, visualmente, pela altura dos ramos em um dendrograma, é possível se ter uma ideia do número de grupos que melhor representa a partição dos dados. Um exemplo de dendrograma pode ser visto na figura ~\ref{fig:dendrograma_exemplo}, o qual é resultado do agrupamento hierárquico com a \emph{linkagem} average, que será melhor detalhada a seguir, e métrica de dissimilaridade euclidiana para o famoso conjunto de dados Iris ~\parencite{Iris}.
 
@@ -821,7 +821,7 @@ Basicamente duas características são mensuradas pelos índices de validação 
 
 O silhouette é um índice de validação proposto por ~\parencite{Rousseeuw:1987:SGA:38768.38772} que tenta avaliar o quão compacta, ou quão similar, cada instância se encontra dentro de seu próprio grupo, e, simultaneamente, o quão distante, ou dissimilar, ela é da instância mais próxima, ou mais similar, à ela e que não pertence ao seu mesmo grupo.
 
-Para cada instância $x_i$ do conjunto de dados $X$ contendo $n$ instâncias, agrupada no grupo $\mathcal{C}_k$, devem ser calculados dois valores, sendo o primeiro a média da métrica de dissimilaridade entre $x_i$ e as demais instâncias contidas em $\mathcal{C}_k$, denominado $a$, e o segundo como o valor mínimo dentre todas as dissimilaridades entre $x_i$ e as demais instâncias não contidas em $\mathcal{C}_k$, denominado $b$. Ou seja, o valor de silhouette $S_i$ do ponto $x_i$ é definido como:
+Para cada instância $x_i$ do conjunto de dados $X$ contendo $n$ instâncias, agrupada no grupo $\mathcal{C}_k$, devem ser calculados dois valores, sendo o primeiro a média da métrica de dissimilaridade entre $x_i$ e as demais instâncias contidas em $\mathcal{C}_k$, denominado $a$, e o segundo como o valor mínimo dentre todas as dissimilaridades entre $x_i$ e as demais instâncias não contidas em $\mathcal{C}_k$, denominado $b$. O valor de silhouette $S_i$ do ponto $x_i$ é definido como:
 \begin{equation}
 S_i = \frac{(b-a)}{\max(a,b)}, \mathrm{onde}
 \end{equation}
@@ -945,7 +945,7 @@ Em tarefas reais de agrupamento, os índices de validação externa não têm ut
 
 Assim, variando-se os algoritmos, métricas, estratégias de pré-processamento e outros parâmetros ou decisões da tarefa de agrupamento de determinado conjunto de dados rotulado, pode-se comparar cada partição obtida com a partição real, ou verdadeira. Ou seja, caso se deseje realizar o agrupamento de dados não rotulados, e não se sabe a melhor estratégia para tal, se, primeiramente,  o agrupamento for feito em uma base de dados que seja, de alguma forma, semelhante à base alvo e a primeira esteja rotulada, então os índices de validação externa podem ser úteis na obtenção de uma estratégia mais adequada para a base não rotulada. %A seguir seguem alguns comentários sobre os principais índices de validação externa.
 
-Existem diversos índices de validação externa tais quais o \emph{Adjusted Rand Index} (ARI) ~\parencite{Hubert1985}, \emph{Adjuste Mutual Info } (AMI) ~\parencite{AMI}, \emph{V-measure} ~\parencite{V_measure}, \emph{Variation of Information} (VI) ~\parencite{Meila}, entre outros. Neste trabalho, o índice VI foi especialmente utilizado, pelo fato de, diferentemente dos demais, ser uma métrica no espaço de partições. Dada a sua importância, ele se encontra detalhado na seção seguinte.
+Existem diversos índices de validação externa tais como o \emph{Adjusted Rand Index} (ARI) ~\parencite{Hubert1985}, \emph{Adjuste Mutual Info } (AMI) ~\parencite{AMI}, \emph{V-measure} ~\parencite{V_measure}, \emph{Variation of Information} (VI) ~\parencite{Meila}, entre outros. Neste trabalho, o índice VI foi especialmente utilizado, pelo fato de, diferentemente dos demais, ser uma métrica no espaço de partições. Dada a sua importância, ele se encontra detalhado na seção seguinte.
 
 
 \subsubsection{\emph{Variation of Information} - VI} \label{sec:VI}
@@ -1005,6 +1005,6 @@ O valores de VI variam de 0, quando $2I(\mathcal{P},\mathcal{P'})=H(\mathcal{P})
 
 Neste capítulo foram apresentados as diversas escolhas que podem ser feitas em tarefas de agrupamento de séries temporais. Inicialmente, foram apresentadas as possíveis operações a serem realizadas em uma fase de pré-processamento como a normalização dos dados, redução de dimensionalidade ou transformadas para se trabalhar no domínio da frequência. Em seguida, foram apresentadas diversas métricas de dissimilaridades e em seguida as possíveis invariâncias desejadas em tarefas de mineração de dados de séries temporais foram enumeradas e exemplificadas. Por fim, os algoritmos mais comuns utilizados no agrupamento de séries temporais, e as estratégias de avaliação de partições, que são realizados por meio de índices internos e externos, foram discutidas.
 
-Após esta extensa revisão acerca do tema de mineração de dados de séries temporais, e, especificamente no contexto de agrupamento, tornou-se evidente a complexidade do assunto, dado, principalmente, às diversas possibilidades de se realizar a tarefa de agrupamento que surgem a partir das diversas combinações possíveis de pré-processamento, métrica de dissimilaridade, algoritmo de agrupamento e método de avaliação do resultado. A cada combinação dessas escolhas dá-se o o nome de estratégia de agrupamento e, uma vez que tal diversidade de estratégias torna difícil a proposição de uma estratégia de agrupamento genérica, faz-se necessário um estudo detalhado e restrito a um número reduzido de escolhas mais promissoras para avaliar a performance de tais escolhas e a consequente proposição de uma estratégia.
+Após esta revisão acerca do tema de mineração de dados de séries temporais, e, especificamente no contexto de agrupamento, tornou-se evidente a complexidade do assunto, dado, principalmente, às diversas possibilidades de se realizar a tarefa de agrupamento que surgem a partir das diversas combinações possíveis de pré-processamento, métrica de dissimilaridade, algoritmo de agrupamento e método de avaliação do resultado. A cada combinação dessas escolhas dá-se o o nome de estratégia de agrupamento e, uma vez que tal diversidade de estratégias torna difícil a proposição de uma estratégia de agrupamento genérica, faz-se necessário um estudo detalhado e restrito a um número reduzido de escolhas mais promissoras para avaliar a performance de tais escolhas e a consequente proposição de uma estratégia.
 
 Tal estudo foi realizado e os resultados, comentários e conclusões se encontram no Capítulo seguinte (~\ref{cap:testes_teoricos}).

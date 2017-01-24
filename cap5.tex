@@ -14,13 +14,14 @@ A tarefa de agrupamento foi realizada em seis conjuntos de dados distintos, mas 
 
 A formação destes $6$ subconjuntos pode ser visualizada na Figura ~\ref{fig:diagrama_dados}. A primeira caixa (Perfis diários anuais) contém $155.855$ curvas ($427*365$), e em seguida, cada uma das curvas é direcionada para o segundo nível. As curvas obtidas por medições em dias do final de semana (sábado e domingo) são direcionadas para a caixa à esquerda (Final de semana), enquanto as curvas obtidas por medições em dias de semana (segunda-feira, terça-feira, quarta-feira, quinta-feira e sexta-feira) são direcionadas para a caixa à direita (Dia de semana). Finalmente, em cada uma das caixas, cada curva é novamente direcionada para um novo subconjunto em função da estação do ano que ela foi obtida. Cada um dos subconjuntos do terceiro nível da figura contém todas as medições, no período definido pelo subconjunto, para cada um dos $427$ medidores, e, dessa maneira, para a realização do agrupamento, faz-se necessária a obtenção de uma curva representativa para cada um dos $427$ medidores em cada um dos $6$ subconjuntos.
 
- \begin{figure}
+ \begin{figure}[!h]
 	%\vspace{2.5cm}
 	%\resizebox{\columnwidth}{!}{%
 	\includegraphics[width=\linewidth]{figuras/diagrama_dados.png}
 	%}
 	\caption{Formação dos $6$ subconjuntos de dados a partir dos perfis diários.}
-\end{figure} \label{fig:diagrama_dados}
+	\label{fig:diagrama_dados}
+\end{figure}
 
 A curva diária mais representativa de cada medidor foi escolhida como o centróide de todas as medições naquele subconjunto, pois esta escolha, em detrimento do medóide, fez com que as curvas características de cada medidor se tornassem mais suaves, o que facilitou a tarefa de agrupamento e de interpretação dos resultados. Após a obtenção do centróide de cada medidor, em cada um dos seis subconjuntos, obteve-se seis matrizes de $427x48$, já que em um dia foram realizadas 48 medições por cada um dos $427$ medidores em cada um dos seis subconjunto de dados. Uma vez que todos os centróides possuíam valores positivos e a normalização max é a mais utilizada no agrupamento de curvas de carga ~\parencite{Chicco}, então neste estudo de caso, cada centróide foi normalizado pela normalização max descrita na Seção ~\ref{sec:norm_Z}.
 
@@ -44,7 +45,7 @@ Observou-se que as partições que possuíam valores maiores do índice silhouet
 
 Não houve a necessidade de se utilizar um método de otimização multiobjetivo, pois todas as  partições já estavam calculadas. O que se fez foi encontrar as soluções não dominadas que formam a fronteira Pareto-ótima. Uma vez encontrada as soluções que formam a fronteira de Pareto-ótima, calculou-se a distância da solução ótima $[1,0]$, ou seja valor de silhouette igual a $1$ e desvio padrão igual à $0$, a cada uma das soluções da fronteira Pareto-ótima. Aquela que possuía a menor distância foi escolhida como partição adequada para aquele conjunto de dados. Os resultados, ou seja, as partições escolhidas, podem ser encontrados na tabela ~\ref{tbl:resultado_australia}.
 
-O espaço de soluções bem como as curvas características de cada curva em cada um dos seis conjuntos de dados podem ser visualizados nas figuras ~\ref{fig:pareto_DDS_transicao}, ~\ref{fig:pareto_DDS_inverno}, ~\ref{fig:pareto_DDS_verao}, ~\ref{fig:pareto_FDS_transicao}, ~\ref{fig:pareto_FDS_inverno} e ~\ref{fig:pareto_FDS_verao}. Nestas figuras, cada ponto representa uma partição, e pode-se notar que existem cerca de $20$ pontos em cada figura, ao invés das $684$ partições inicialmente obtidas. Isso ocorreu devido à restrição imposta ao se descartar partições cujo grupo majoritário contêm mais de \%50 das instâncias ou o grupo minoritário contém menos de \%5 do total de instâncias. Esta redução drástica no número de partições, reforça o caráter compacto do grupo, já que para diferentes escolhas de algorimo e métrica de dissimilaridade, a maioria das partições obtidas não atendeu à restrição imposta. Os pontos em vermelho nas figuras compõem a fronteira Pareto-ótima, e a solução, ou partição, indicada é representada pelo ponto amarelo.
+O espaço de soluções bem como as curvas características de cada curva em cada um dos seis conjuntos de dados podem ser visualizados nas figuras ~\ref{fig:pareto_FDS_verao}, ~\ref{fig:pareto_FDS_inverno}, ~\ref{fig:pareto_FDS_transicao}, ~\ref{fig:pareto_DDS_verao}, ~\ref{fig:pareto_DDS_inverno} e ~\ref{fig:pareto_DDS_transicao}. Nestas figuras, cada ponto representa uma partição, e pode-se notar que existem cerca de $20$ pontos em cada figura, ao invés das $684$ partições inicialmente obtidas. Isso ocorreu devido à restrição imposta ao se descartar partições cujo grupo majoritário contêm mais de \%50 das instâncias ou o grupo minoritário contém menos de \%5 do total de instâncias. Esta redução drástica no número de partições, reforça o caráter compacto do grupo, já que para diferentes escolhas de algorimo e métrica de dissimilaridade, a maioria das partições obtidas não atendeu à restrição imposta. Os pontos em vermelho nas figuras compõem a fronteira Pareto-ótima, e a solução, ou partição, indicada é representada pelo ponto amarelo.
 
 %\begin{center}
 	%\begin{table}			
@@ -85,10 +86,11 @@ O espaço de soluções bem como as curvas características de cada curva em cad
 			\end{tabular}
 			
 		}
-	\end{table} \label{tbl:resultado_australia}
+	\label{tbl:resultado_australia}
+	\end{table} 
 \end{center}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
@@ -105,7 +107,7 @@ O espaço de soluções bem como as curvas características de cada curva em cad
 	\caption{Resultado final para os curvas diárias das cargas medidas nos dias do final de semana e no verão. Os pontos em azul, na Figura ~\ref{fig:pareto_FDS_verao}, representam partições dominadas pelas demais, enquanto os pontos vermelhos formam a fronteira de Pareto-ótima. O ponto em amarelo é a partição escolhida por ser a mais próxima do ponto ótimo.}
 	\label{fig:FDS_verao_}
 \end{figure}
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
@@ -123,7 +125,7 @@ O espaço de soluções bem como as curvas características de cada curva em cad
 	\label{fig:FDS_inverno_}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
@@ -141,7 +143,7 @@ O espaço de soluções bem como as curvas características de cada curva em cad
 	\label{fig:FDS_transicao_}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
@@ -159,7 +161,7 @@ O espaço de soluções bem como as curvas características de cada curva em cad
 	\label{fig:DDS_verao_}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
@@ -177,7 +179,7 @@ O espaço de soluções bem como as curvas características de cada curva em cad
 	\label{fig:DDS_inverno_}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!h]
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering

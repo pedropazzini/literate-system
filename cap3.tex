@@ -11,7 +11,7 @@ Se considerarmos que no Capítulo ~\ref{cap:agrupamento_series_temporais}:
 	\item discutiu-se 12 métricas de dissimilaridades puras (euclidiana, \emph{manhattan}, \emph{chebyshev}, DTW, LB-Keogh, EDR, Lorentzian, \emph{dice}, \emph{jaccard}, \emph{pearson}, \emph{mahalanobis}, \emph{cosine}) além das versões corrigidas pela correlação temporal (CORT) e complexidade (CID) de cada uma delas, existem 36 métricas de dissimilaridades  possíveis,
 	\item analisou-se 7 algoritmos diferentes, sendo 3 hierárquicos (cada um com uma das \emph{linkagens }\emph{average}, \emph{complete} e \emph{single}), 3 particionais (\emph{k-means},\emph{k-means++} e \emph{k-medoids}) e um baseado em densidades (DBSCAN),
 \end{itemize}
- então existe um limite de $5*36*7=1260$ maneiras distintas de-se realizar o agrupamento de dados de séries temporais. Este número é, na verdade, menor, devido ao fato de algoritmo \emph{k-means} fazer uso somente da distância euclidiana e de algumas dissimilaridades como a DTW, EDR, dentre outras serem inaplicáveis após a transformação dos dados pela transformada de Fourier. 
+ então, dentre estas opções, existe um limite de $5*36*7=1260$ maneiras distintas de-se realizar o agrupamento de dados de séries temporais. Este número é, na verdade, menor, devido ao fato de algoritmo \emph{k-means} fazer uso somente da distância euclidiana e de algumas dissimilaridades como a DTW, EDR, dentre outras serem inaplicáveis após a transformação dos dados pela transformada de Fourier. 
  
  No entanto, este número demonstra bem o grande número de caminhos possíveis a serem seguidos e a dificuldade enfrentada por um projetista quando ele deve escolher um destes caminhos para realizar a tarefa de agrupamento de séries temporais. Testes iniciais foram feitos com as diversas possibilidades enumeradas, no entanto a análise dos resultados obtidos se tornou árdua, pois, dado o grande número de estratégias testadas, não ficou claro se alguma delas, ou algum grupo delas, se sobressaiu em relação às demais de forma significativa considerando-se todas as bases de dados. Por isto, o número de possibilidades de agrupamento das bases de dados do UCR \emph{Time Series} neste capítulo é significativamente reduzido, e somente as escolhas mais comuns na literatura serão estudadas a fundo e comparadas entre si. 
  
@@ -282,7 +282,7 @@ Dessa maneira, surge a pergunta: qual, ou quais, dos índices internos detalhado
 
 Após a escolha de um algoritmo e uma métrica de dissimilaridade como, por exemplo, um algoritmo de agrupamento hierárquico com linkagem \emph{average} e a métrica CID-euclidiana, para cada valor de $k$ no intervalo criado, uma partição é obtida e avaliada com cada um dos índices da Tabela ~\ref{tbl:indices_internos}. A título de exemplo, tal procedimento, com o algoritmo e métrica de dissimilaridade acima mencionado, foi realizado no conjunto de dados \emph{Herring} (vide Figura ~\ref{fig:Herring}), que possui $k_{opt}=2$, e os resultados podem ser vistos na Tabela ~\ref{tbl:indices_iterativos}. Os índices DBI, XB e silhouette tiveram êxito na sugestão do valor de $k_{opt}$, ao passo que todos os demais falharam em tal tarefa. A partir da combinação da sugestão de cada um dos $7$ índices testados podem-se derivar os seguintes índices: moda dos valores sugeridos, cujo valor é 2; média dos valores sugeridos, que possui valor $3.57$ que é truncado para $4$ já que este é o valor inteiro mais próximo; e finalmente mediana dos valores sugeridos para $k_{opt}$, cujo valor é 3. Logo, para o teste em questão, dentre os índices originados pela combinação dos índices puros, somente a moda teve sucesso na indicação do valor de $k_{opt}$.
 
-\begin{table} []
+\begin{table} [!h]
 	\centering
 	\caption{Resultados dos experimentos iterativos para o conjunto de dados \emph{Herring}, cujo número de grupos é igual a 2. Os valores em negrito representam os melhores valores obtidos em cada índice.}  \label{tbl:indices_iterativos}
 %	\resizebox{\columnwidth}{!}{%
@@ -304,7 +304,7 @@ Após a escolha de um algoritmo e uma métrica de dissimilaridade como, por exem
 
 Os valores em negrito na Tabela ~\ref{tbl:indices_iterativos} representam os melhores valores obtidos em cada índice, e quando este valor coincide com o valor de $k_{opt}$, então um acerto é computado para o índice naquela base. Em seguida, tal procedimento foi repetido para 70 bases de dados, com o objetivo de se construir uma tabela binária, representado os acertos e erros de cada índice em cada base. Ao final da tabela, o número de acertos de cada índice foi somado e dividido pelo número de bases, para se ter uma ideia da porcentagem de vezes que cada índice obteve sucesso. Devido às suas grandes dimensões (70x13), somente parte da tabela binária de tal experimento pode ser vista na Tabela ~\ref{tbl:indices_hits}, já que diversas linhas (datasets) e algumas colunas (índices) da tabela não se encontram presentes.
 
-	\begin{table}[]
+	\begin{table}[!h]
 		\centering
 		\caption{Resultados dos experimentos iterativos para cada conjunto de dados, onde o asterisco corresponde à um sucesso na sugestão do índice para a base de dados. Foi utilizado o algoritmo hierárquico com linkagem \emph{average} e métrica de dissimilaridade cid-euclidiana.}  \label{tbl:indices_hits} 
 		%\resizebox{\columnwidth}{!}{
@@ -417,13 +417,14 @@ A tabela resultante possui $78$ linhas, ou combinações de algoritmos e métric
 
 Logo, conclui-se que o índice Calinski-Harabasz é o mais indicado para a tarefa de se definir o número de grupos em que um conjunto de dados de séries temporais se encontra naturalmente dividido, já que para a obtenção do índice combinado moda, que possui performance equivalente, faz-se necessária a obtenção de todos os demais índices puros além do citado índice, o que, do ponto de vista do custo computacional, não é interessante.
 
- \begin{figure}
+ \begin{figure}[h!]
  	%\vspace{2.5cm}
  	%\resizebox{\columnwidth}{!}{%
  		\includegraphics[width=\linewidth]{figuras/figura_alteracao_centroid.png}
  	%}
  	\caption{Resultado do teste de Nemenyi para o teste do melhor índice interno para apontar o número de grupos.}
- \end{figure} \label{fig:resultado_iterativo}
+ 	 	\label{fig:resultado_iterativo}
+ \end{figure} 
 
 
 \subsection{Índice interno para avaliação de partições com o número de grupos definido} \label{sec:indice_interno_k_fixo}
@@ -443,7 +444,7 @@ Os resultados numéricos podem ser vistos na Tabela ~\ref{tbl:rankings_3}, bem c
 A partir deste breve experimento, pode-se afirmar que, caso não se tivesse disponível a rotulação dos dados, mas somente o número de grupos, o índice Calinski-Harabasz é mais indicado que o índice silhouette para indicar uma melhora, ou piora, nas partições obtidas com a variação do algoritmo de agrupamento para a base de dados e métrica de dissimilaridade escolhida.
 
 %\begin{center}
-	\begin{table}[]
+	\begin{table}[!h]
 		\centering
 		\caption{Rankings dos valores dos índices Para cada uma das partições obtidas variando-se o algoritmo de agrupamento.} 	\label{tbl:rankings_3}
 		\begin{tabular}{lrrrrrr}
@@ -459,7 +460,7 @@ A partir deste breve experimento, pode-se afirmar que, caso não se tivesse disp
 %\end{center}
 
 %\begin{center}
-	\begin{table}[]
+	\begin{table}[!h]
 		\centering
 		\caption{Rankings dos valores dos índices da tabela ~\ref{tbl:rankings_3}. Note que valores maiores para o Calinski-Harabasz e o silhouette implicam em rankings melhores, ao passo que para o VI em rankings piores.} 	\label{tbl:rankings}
 		\begin{tabular}{lrrrrrr}
@@ -569,13 +570,14 @@ Para $70$ bases e $6$ índices internos, o valor crítico da estatística de Fri
 
 Logo, em uma tarefa de agrupamento real, no qual não se possui a rotulação dos dados e já se decidiu, ou já se sabe \emph{a priori}, o número de grupos que os dados se encontram divididos, os índices silhouette e Dunn são os mais indicados para avaliar as novas partições obtidas por diferentes estratégias de agrupamento.
 
- \begin{figure}
+ \begin{figure}[h!]
  	%\vspace{2.5cm}
  	%\resizebox{\columnwidth}{!}{%
  	\includegraphics[width=\linewidth]{figuras/best_coherence.png}
  	%}
  	\caption{Resultado do teste de Nemenyi para o teste de coerência dos índices internos com o VI.}
- \end{figure} \label{fig:coherence}
+ 	\label{fig:coherence}
+ \end{figure}
 
 \section{Conclusões do Capítulo}
 
