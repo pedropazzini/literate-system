@@ -1,7 +1,7 @@
 \chapter{Introdução}
 Ao conjunto de tecnologias que visam modernizar o sistema elétrico de potência, dá-se o nome de Redes Elétricas Inteligentes (\emph{Smart Grids}), doravante REI. Tal conjunto de tecnologias faz uso de sistemas de medição, computação e comunicações digitais de forma a gerar um fluxo de informações bidirecional entre o fornecedor do sistema de energia e o cliente final. Os maiores impactos da adoção de tais tecnologias ocorrerão na distribuição de energia elétrica e nos pequenos consumidores. Pelo número crescente de investimentos em pesquisa de REI em todo mundo, percebe-se que esta se apresenta como uma forte tendência de modernização dos sistemas elétricos de potência em diversos países ~\parencite{REI}.
 
-Uma das bases dessa nova tecnologia é a instalação de sensores, conhecidos como \emph{smart meters} ou medidores inteligentes (MI),  em diversos pontos da rede, de forma a se obter dados relevantes da mesma. Com a instalação desses sensores em cada consumidor, seja ele residencial, comercial ou industrial, será possível medir periodicamente a potência consumida por ele. De posse desses dados, os consumidores podem ser classificados por padrões de consumo e a partir dessa classificação espera-se obter, por exemplo, as seguintes vantagens:
+Uma das bases dessa nova tecnologia é a instalação de sensores, conhecidos como \emph{smart meters} ou medidores inteligentes (MI),  em diversos pontos da rede, de forma a se obter dados relevantes da mesma. Com a instalação desses sensores em cada consumidor, seja ele residencial, comercial ou industrial, será possível medir periodicamente a potência consumida por ele.  De posse dos dados gerados pelos medidores inteligentes, os consumidores podem ser classificados por padrões de consumo e a partir dessa classificação espera-se obter, por exemplo, as seguintes vantagens:
 \begin{itemize}
 	\item Realização de uma nova política de tarifas diferenciadas por tipo de consumidor residencial.
 	\item Aprimoramento das técnicas de previsão de demanda por parte dos fornecedores
@@ -25,7 +25,37 @@ O problema de se dividir as curvas de carga geradas por MI em grupos é um probl
 
 \section{Objetivos e contribuições}
 
-O objetivo geral desta dissertação de mestrado é de investigar as técnicas consideradas estado da arte para o agrupamento de séries temporais, visando à proposta de uma metodologia para agrupamento de curvas de carga de consumidores. Tal investigação envolveu o estudo teórico-empírico de diferentes formas de normalização de dados, métodos de agrupamento, medidas de dissimilaridade e índices de validação.
+O objetivo geral desta dissertação de mestrado é de investigar as técnicas consideradas estado da arte para o agrupamento de séries temporais, visando à proposta de uma metodologia para agrupamento de curvas de carga de consumidores residenciais. Tal investigação envolveu o estudo teórico-empírico de diferentes formas de normalização de dados, métodos de agrupamento, medidas de dissimilaridade e índices de validação.
+
+A Agência Nacional de Energia Elétrica, ANEEL, em uma resolução de 2010 ~\parencite{ANEEL}, definiu os critérios de divisão tarifária dos seus consumidores. A primeira divisão que é feita, é baseada na tensão de atendimentos dos consumidores que são divididos em:
+\begin{itemize}
+	\item grupo A: tensão de atendimento superior à 2,3 kV, que pode ainda ser subdivido em:
+	\begin{itemize}
+		\item subgrupo A1: atendimento em tensão igual ou superior à 230 kV,
+		\item subgrupo A2: atendimento em tensão de 88 kV a 130 kV,
+		\item subgrupo A3: atendimento em tensão de 69 kV,
+		\item subgrupo A4: atendimento em tensão de 2,3 kV a 44 kV,
+		\item subgrupo AS: tendimento em tensão inferior a 2,3 kV mas por sistema subterrâneo,
+	\end{itemize}
+	\item e grupo B: tensão de atendimento igual ou inferior à 2,3kV, que também é subdividido em:
+	\begin{itemize}
+		\item subgrupo B1: atendimento residencial,
+		\item subgrupo B2: atendimento rural,
+		\item subgrupo B3: atendimento das demais classes,
+		\item subgrupo B4: atendimento da iluminação pública.
+	\end{itemize}
+\end{itemize}
+
+Existem ainda, mais subdivisões, para alguns dos subgrupos do grupo B, e especificamente o subgrupo B1, pode ser dividido, ainda, em:
+\begin{itemize}
+	\item atendimento residencial,
+	\item e atendimento residencial de Baixa Renda -TSEE (Tarifa Social de Energia Elétrica).
+\end{itemize}
+Esta divisão implica em um cálculo tarifário diferenciado para as famílias de baixa renda, e seus critérios baseiam-se não nos perfis de curva de carga, mas sim em fatores de renda e de consumo, como pode ser visto em ~\parencite{TSEE}.
+
+O cálculo tarifário das cargas do grupo A, que são aquelas que demandam uma maior potência, sendo em geral, cargas industriais e comerciais, possuem um cálculo tarifário bem mais complexo do que o cálculo tarifário residencial. As empresas podem contratar uma potência mínima das concessionárias de energia, pagando multas, inclusive, se o seu consumo ultrapassar o valor contratado. Além deste fator, para as cargas do grupo A, o cálculo tarifário varia de acordo com o mês e a hora do dia de consumo, o que motiva as empresas a fazerem um uso mais racional da energia.
+
+Dessa maneira, o objetivo deste trabalho é a realização da proposição de uma técnica que gere uma segmentação maior dos consumidores residencias, baseada em perfis de consumo e não em critérios de renda, de forma a ser possível a proposição de uma política tarifária diferenciada para os consumidores residencias, assim como já é feito atualmente para os consumidores do grupo A.
 
 Seria extremamente interessante que os dados a serem utilizados durante o trabalho fossem o mais representativos possível à realidade brasileira, ou seja, sem as influências da grande variação de temperatura que ocorre nos países do hemisfério norte, que é onde se encontra mais avançada a pesquisa e implantação de REI e, consequentemente, de instalação de MI e a disponibilidade de dados para pesquisa. Em ~\parencite{REI} é feita uma menção à um projeto da CEMIG em Sete Lagoas denominado "Cidade do Futuro". Tal projeto é reconhecido como pioneiro no Brasil no que se refere à pesquisa e instalação de equipamentos de REI no atual sistema elétrico de potência brasileiro. No entanto, estes dados ainda não são de domínio público. Dessa maneira, neste trabalho, optou-se por utilizar dados de cargas residenciais da Austrália, obtidos de ~\parencite{dadosAustralia}.
 
@@ -51,7 +81,7 @@ Dentre as principais contribuições desta dissertação, pode-se citar:
 \begin{itemize}
 	\item Extensa revisão bibliográfica acerca do problema e das várias opções para a realização de agrupamento de séries temporais.
 	\item Proposição de uma metodologia genérica para a realização de agrupamento de séries temporais embasada em dados empíricos de experimentos realizados com bases de dados rotuladas.
-	\item Proposição de uma metodologia específica para a realização de agrupamento de curvas de carga.
+	\item Proposição de uma metodologia específica para a realização de agrupamento de curvas de cargas residenciais.
 \end{itemize}
 
 \section{Visão Geral do Texto}
