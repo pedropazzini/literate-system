@@ -512,8 +512,8 @@ Em problemas de mineração de dados de séries temporais, é desejável que a m
 Quando as séries temporais a serem comparadas são idênticas, mas medidas com diferentes escalas, estas possuem amplitudes distintas, e as métricas de dissimilaridades já discutidas podem apresentar valores muito altos, o que pode indicar erroneamente que as séries são dissimilares. Além da amplitude, séries que são idênticas, mas possuem um valor médio diferente (\emph{offset}), podem apresentar também valores muito grandes de dissimilaridade. A solução apresentada em \parencite{CID}, e discutida na seção ~\ref{sec:norm_Z}, para se alcançar a invariância à amplitude e \emph{offset} é a utilização da normalização Z nas curvas das séries temporais, em uma etapa de pré-processamento. Exemplos de curvas que devem ser comparadas com invariância à amplitude e \emph{offset} podem ser vistas na Figura ~\ref{fig:inv_offset_amplitude}.
 
 \begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figuras/invariancias/amplitude_offset.png}
-	\caption{À esquerda duas curvas, não normalizadas, que, quando comparadas, se parecem bastante distintas, quando na verdade não o são. À direita um eletrocardiograma, a ser comparado com um sinal de medição contínuo. As duas primeiras comparações têm um bom casamento, mas as subsequentes apresentam valores maiores em uma comparação ponto a ponto devido ao crescente \emph{offset} que a curva começa a apresentar. Extraído de ~\parencite{CID}}
+	\includegraphics[width=\linewidth]{figuras/invariancias/amplitude_offset_pt.png}
+	\caption{À esquerda duas curvas, não normalizadas, que, quando comparadas, se parecem bastante distintas, quando na verdade não o são. À direita um eletrocardiograma, a ser comparado com um sinal de medição contínuo. As duas primeiras comparações têm um bom casamento, mas as subsequentes apresentam valores maiores em uma comparação ponto a ponto devido ao crescente \emph{offset} que a curva começa a apresentar. Adaptado de ~\parencite{CID}}
 	\label{fig:inv_offset_amplitude}
 \end{figure}
 
@@ -533,8 +533,8 @@ Muito comum em sinais biológicos, a invariância à escala local ou ao deslocam
 Em alguns casos, duas séries temporais que são idênticas ou da mesma classe mas, por questões de medição, possuem tamanhos distintos, podem ter sua dissimilaridade afetada ao se utilizar alguma métrica de dissimilaridade como a DTW, por exemplo. A solução apresentada em \parencite{CID} para tal é a multiplicação de uma das curvas por um fator $\kappa$, que irá esticar ou reduzir uma das curvas para melhorar o casamento entre elas. A principal dificuldade em se obter a invariância à escala uniforme na comparação de séries temporais é a definição do valor de $\kappa$, que na prática, é obtido por meio de diversos testes dentro de determinado intervalo na etapa de pré-processamento. Um alinha mento ótimo obtido por meio da escala uniforme pode ser visto na Figura ~\ref{fig:inv_escala_uniforme}.
 
 \begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figuras/invariancias/escala_uniforme.png}
-	\caption{Duas curvas cujo alinhamento ótimo é obtido após a curva ser esticada por um fator $\kappa=1.41$, que foi obtido por força bruta. Extraído de ~\parencite{CID}.}
+	\includegraphics[width=\linewidth]{figuras/invariancias/escala_uniforme_pt.png}
+	\caption{Duas curvas cujo alinhamento ótimo é obtido após a curva ser esticada por um fator $\kappa=1.41$, que foi obtido por força bruta. Adaptado de ~\parencite{CID}.}
 	\label{fig:inv_escala_uniforme}
 \end{figure}
 
@@ -543,8 +543,8 @@ Em alguns casos, duas séries temporais que são idênticas ou da mesma classe m
 A invariância ao defasamento é muito importante quando se compara duas séries temporais periódicas. Segundo \parencite{CID} algumas heurísticas foram propostas para se obter a invariância ao defasamento entre duas séries temporais, mas nenhuma delas é robusta o suficiente, de forma que tal invariância deve ser obtida por meio do teste de todos os alinhamentos possíveis entre as curvas na etapa de pré-processamento. Dessa maneira, este é um problema em aberto na literatura, e nenhuma das dissimilaridades ou técnicas de pré-processamento discutidas alcançam a invariância ao deslocamento. A Figura ~\ref{fig:inv_defasamento} demonstra a obtenção desta invariância para duas séries temporais.
 
 \begin{figure}[h!]
-	\includegraphics[width=\linewidth]{figuras/invariancias/defasamento.png}
-	\caption{Duas curvas que após sucessivas tentativas de defasamento de uma delas, possuem casamento ótimo. Cada uma delas representa dados de radiação colhidos de uma estrela diferente. Extraído de ~\parencite{CID}.}
+	\includegraphics[width=\linewidth]{figuras/invariancias/defasamento_pt.png}
+	\caption{Duas curvas que após sucessivas tentativas de defasamento de uma delas, possuem casamento ótimo. Cada uma delas representa dados de radiação colhidos de uma estrela diferente. Adaptado de ~\parencite{CID}.}
 	\label{fig:inv_defasamento}
 \end{figure}
 
